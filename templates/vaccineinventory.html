@@ -1,0 +1,75 @@
+{% include 'headers/headers.html' %}
+
+
+<body class="container-fluid bg-dark" style="background-image: url('/public/static/images/istockphoto-1297005217-612x612.jpg'); background-size:cover;background-blend-mode:overlay; height:100vh">
+    <div style="opacity:0.9">
+        <div>
+            <h1 class="text-center">DAIRY FARM MANAGEMENT</h1>
+        </div>
+        <div class="container-fluid mt-5">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <div class="card-title">
+                                <h2>VACCINE INVENTORY</h2>
+                            </div>
+                        </div>
+                        {% for message in get_flashed_messages() %} {{ message }} {% endfor %}
+                        <div class="card-body">
+                            {% for message in get_flashed_messages() %} {{ message }} {% endfor %}
+                            <div class="card-body">
+                                <form action="{{url_for('vaccineinventory')}}" method="post">
+
+                                    <div class="form-group ">
+                                        <label for="cow_breed">vaccine name</label>
+                                        <input type="text" class="form-control" name="vaccine_name" placeholder="vaccine name" required>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="form-control-label">disease treated</label>
+                                        <input type="text" class="form-control" placeholder="disease treated" name="disease_treated">
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="form-control-label">admin national id</label>
+                                        <input type="number" class="form-control" placeholder="admin national id" name="admin_national_id">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-control-label">available vaccine quantity</label>
+                                        <input type="number" class="form-control" placeholder="available vaccine quantity" name="available_vaccine_quantity">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-control-label">Date in</label>
+                                        <div class='input-group date' id='datetimepicker2'>
+                                            <input name="date_in" type='text' placeholder="Date in" id="date" class="form-control" />
+                                            <span class="input-group-addon">
+                                         <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="form-control-label">supplier name</label>
+                                        <input type="text" class="form-control" placeholder="supplier name" name="supplier_name">
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="form-control-label">supplier contact</label>
+                                        <input type="text" class="form-control" placeholder="supplier contact" name="supplier_contact">
+                                    </div>
+                                    <button class="btn btn-block btn-primary form-control" type="submit">submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/public/static/jquery2.min.js"></script>
+    <script src="/public/static/moment.js"></script>
+    <script src="/public/static/datetimepicker.min.js"></script>
+    <link rel="stylesheet" href="/public/static/bootstrap-datetimepicker.css">
+    <script>
+        $(function() {
+            $('#date').datetimepicker();
+        })
+    </script>
+    {% include 'headers/footers.html' %}

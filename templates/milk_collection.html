@@ -1,0 +1,77 @@
+{% include 'headers/headers.html' %} {% include 'headers/adminnav.html' %}
+
+<body class="container-fluid bg-dark" style="background-image: url('/public/static/images/istockphoto-1297005217-612x612.jpg'); background-size:cover;background-blend-mode:overlay; height:100vh">
+    <div style="opacity:0.9">
+        <div>
+            <h1 class="text-center">DAIRY FARM MANAGEMENT</h1>
+        </div>
+        <div class="container-fluid mt-5">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <div class="card-title">
+                                <h2>MILK COLLECTION FORM</h2>
+                            </div>
+                        </div>
+                        {% for message in get_flashed_messages() %} {{ message }} {% endfor %}
+                        <div class="card-body">
+                            <form action="{{url_for('milk_collections')}}" enctype="multipart/form-data" method="post">
+
+                                <div class="form-group">
+                                    <label class="form-control-label">Milk Quantity</label>
+                                    <input type="text" class="form-control" name="milk_quantity" placeholder="Milk quantity" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="status">Milk Quality</label>
+                                    <input type="status" class="form-control" name="milk_quality" placeholder="Milk quality" required>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="form-control-label">Milking Personnel</label>
+                                    <input type="text" class="form-control" placeholder="Milking Personnel" name="milking_personnel" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">Milk Collection Time</label>
+                                    <select name="milk_collection_time" class="form-control" id="" required>
+                                    <option value="">select time..</option>
+                                    <option value="morning">morning</option>
+                                    <option value="evening">evening</option>
+                                </select>
+                                </div>
+                                <div class="form-group" id>
+                                    <label class="form-control-label">Cow Tag ID</label>
+                                    <input type="text" name="cow_tag_id" placeholder="Cow Tag ID" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">Milk Collection Date</label>
+                                    <div class='input-group date' id='datetimepicker2'>
+                                        <input name="milk_collection_date" type='text' placeholder="Milk Collection Date" id="date" class="form-control" />
+                                        <span class="input-group-addon">
+                                     <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-block btn-primary form-control" type="submit">submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script src="/public/static/jquery2.min.js"></script>
+    <script src="/public/static/moment.js"></script>
+    <script src="/public/static/datetimepicker.min.js"></script>
+    <link rel="stylesheet" href="/public/static/bootstrap-datetimepicker.css">
+
+    <script>
+        $(function() {
+            $('#date').datetimepicker();
+        })
+    </script>
+
+    {% include 'headers/footers.html' %}

@@ -1,0 +1,57 @@
+{% include 'headers/headers.html' %} {% include 'headers/headers.html' %}
+
+<div class="text-center">
+    <div style="opacity: 0.9;">
+        <h1>DAIRY MANAGEMENT SYSTEM</h1>
+    </div>
+</div>
+
+<body class="bg-dark container-fluid" style="background-image: url('/public/static/images/cow.jpg'); background-size:cover ;height: 100%;background-position: center; background-blend-mode: overlay; background-repeat: no-repeat;height:100vh;">
+    <div style="opacity: 0.9">
+
+        <div class="container-fluid mt-5">
+            <div class="row">
+                <div class="col-md-6 offset-md-3 ">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title text-center">
+                            </div>
+                        </div>
+                        {% for message in get_flashed_messages() %} {{ message }} {% endfor %}
+                        <div class="card-body">
+                            <form action="{{url_for('milk_sales')}}" method="POST">
+                                <div class="form-group">
+                                    <label class="form-control-label">Transaction Code</label>
+                                    <input type="text" name="transaction_code" placeholder="Transaction Code" class="form-control">
+                                </div>
+                                <input type="submit" class="btn btn-primary btn-block" value="submit" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    {% include 'headers/footers.html' %}
+    <script>
+        function viewPassword() {
+            var passwordInput = document.getElementById('password');
+            var passStatus = document.getElementById('pass-status');
+
+            if (passwordInput.type == 'password') {
+                passwordInput.type = 'text';
+                passStatus.class = 'fa fa-eye-slash';
+
+            } else {
+                passwordInput.type = 'password';
+                passStatus.class = 'fa fa-eye';
+            }
+        }
+    </script>
+
+    </html>

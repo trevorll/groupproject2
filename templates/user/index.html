@@ -1,0 +1,195 @@
+{% include 'headers/headers.html' %}
+
+
+<body class="bg-dark container-fluid" style="background-image: url('/public/static/images/cow.jpg'); background-size:cover ;height: 100%;background-position: center; background-blend-mode: overlay; background-repeat: no-repeat;height:100vh;">
+    <div style="opacity: 0.9">
+        <section>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-2" mr-auto>
+                        <a href="{{url_for('login')}}" class="btn btn-primary btn-block">
+                            <i fa fa-key></i>Home </a>
+                    </div>
+                    <div class="col-md-2" mr-auto>
+                        <a href="" class="btn btn-primary btn-block" data-target="#updaterecordsmodal" data-toggle="modal">
+                            <i fa fa-key></i>update details </a>
+                    </div>
+                    <div class="col-md-2" mr-auto>
+                        <a href="#" class="btn btn-primary btn-block" data-target="#ordermilkmodal" data-toggle="modal">
+                            <i></i>order milk
+                        </a>
+                    </div>
+                    <div class="col-md-2" mr-auto>
+                        <a href="{{url_for('view')}}" class="btn btn-primary btn-block">
+                            <i></i>view cows
+                        </a>
+                    </div>
+                    <div class="col-md-2" mr-auto>
+                        <a href="#" class="btn btn-danger btn-block" data-target="#changepasswordmodal" data-toggle="modal">
+                            <i></i>change password
+                        </a>
+                    </div>
+                    <div class="col-md-2" mr-auto>
+                        <a href="{{url_for('logout')}}" class="btn btn-warning btn-block">
+                            <i></i>logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% for message in get_flashed_messages() %} <span class="text-center">{{message}}</span> {% endfor %}
+    </div>
+
+    <section>
+        <!-- <link rel="stylesheet" href="/public/static/bootstrap.min.css"> -->
+        <div class="modal fade" id="updaterecordsmodal">
+            <div class="modal-dialog modal-lg bg-primary">
+                <div class="modal-content">
+                    <div class="modal-header text-white bg-primary">
+                        <h1 class="modal-title" id="updaterecordsslabel">update details</h1>
+                        <button class="close" data-dismiss="modal" type="button">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{url_for('update_farmer_details')}}" method="POST">
+                            <div class="form-group">
+                                <label class="form-control-label">first name</label>
+                                <input type="text" class="form-control" value="{{farmer.first_name}}" name="first_name" placeholder="first name">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">last name</label>
+                                <input type="text" class="form-control" value="{{farmer.last_name}}" name="last_name" placeholder="last name">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">other name</label>
+                                <input type="text" class="form-control" value="{{farmer.other_names}}" name="other_names" placeholder="other names">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">phone number</label>
+                                <input type="tel" id="phone" class="form-control w-100" value="{{farmer.phone_number}}" name="phone_number">
+                                <p class="hide" id="result"></p>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">email address</label>
+                                <input type="email" class="form-control" value="{{farmer.email}}" name="email_address" placeholder="email address">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% for message in get_flashed_messages() %} {{ message }} {% endfor %}
+    <section>
+        <div class="modal fade" id="ordermilkmodal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h1 class="modal-title" id="ordermilklabel">Make order</h1>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{url_for('pay')}}" method="post">
+                            <div class="form-group">
+                                <label class="form-control-label">Quantity</label>
+                                <input type="number" id="quantity" name="quantity" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">Amount</label>
+                                <input type="number" id="amount" value="" class="form-control" name="amount">
+                            </div>
+                            <input type="submit" class="btn btn-primary btn-block" value="submit" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="modal fade" id="changepasswordmodal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header text-center text-white bg-danger">
+                        <h2 class="modal-title" id="changepasswordlabel">Change password</h2>
+                        <button type="button" data-dismiss="modal" class="close">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{url_for('changepassword')}}" method="POST">
+                            <div class="form-group">
+                                <label class="form-group-label">Old password</label>
+                                <input type="password" name="old_password" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-group-label">New password</label>
+                                <input type="password" name="new_password" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-group-label">Confirm password</label>
+                                <input type="password" name="confirm_password" class="form-control">
+                            </div>
+                            <input type="submit" value="Change" class="btn btn-primary btn-block" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </section>
+</body>
+
+<!-- jQuery library -->
+<script src="/public/static/jquery3.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="/public/static/bootstrap3.min.js"></script>
+
+
+
+</html>
+<script>
+    var input = document.querySelector("#phone"),
+        errorMsg = document.querySelector("#result"),
+        validMsg = document.querySelector("#result");
+
+    // here, the index maps to the error code returned from getValidationError - see readme
+    var errorMap = ["Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
+
+    // initialise plugin
+    var iti = window.intlTelInput(input, {
+        utilsScript: "/public/static/js/utils.js"
+    });
+
+    var reset = function() {
+        input.classList.remove("error");
+        errorMsg.innerHTML = "";
+        errorMsg.classList.add("hide");
+        validMsg.classList.add("hide");
+    };
+
+    // on blur: validate
+    input.addEventListener('blur', function() {
+        reset();
+        if (input.value.trim()) {
+            if (iti.isValidNumber()) {
+                validMsg.classList.remove("hide");
+            } else {
+                input.classList.add("error");
+                var errorCode = iti.getValidationError();
+                errorMsg.innerHTML = errorMap[errorCode];
+                errorMsg.classList.remove("hide");
+            }
+        }
+    });
+
+    // on keyup / change flag: reset
+    input.addEventListener('change', reset);
+    input.addEventListener('keyup', reset);
+</script>
+
+<script>
+    var quantity = document.querySelector("#quantity");
+    var amount = document.querySelector('#amount');
+    quantity.addEventListener('input', function() {
+        amount.value = parseInt(quantity.value) * 45;
+    });
+</script>

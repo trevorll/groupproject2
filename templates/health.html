@@ -1,0 +1,94 @@
+{% include 'headers/headers.html' %}{% include '/headers/adminnav.html'%}
+
+
+<body class="bg-dark" style="background-image: url('public/static/images/cowvaccination.jpg'); background-size:cover; background-blend-mode:overlay">
+    <div style="opacity:0.9">
+        <div>
+            <h1 class="text-center">DAIRY FARM MANAGEMENT</h1>
+        </div>
+        <div class="container-fluid mt-5">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <div class="card-title">
+                                <h2>HEALTH RECORDS</h2>
+                            </div>
+                        </div>
+                        {% for message in get_flashed_messages() %} {{ message }} {% endfor %}
+                        <div class="card-body">
+                            <form action="{{url_for('health')}}" method="post">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label class="national_id">cow_tag_id</label>
+                                        <input type="text" class="form-control" name="cow_tag_id" placeholder="cow tag id" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="cow_breed">vaccine name</label>
+                                        <input type="text" class="form-control" name="vaccine_name" placeholder="vaccine name" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label">disease treated</label>
+                                        <input type="text" class="form-control" placeholder="disease treated" name="disease_treated">
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label">date of vaccination</label>
+                                        <div class='input-group date' id='datetimepicker2'>
+                                            <input name="date_of_vaccination" type='text' placeholder="date of vaccination" id="date" class="form-control" />
+                                            <span class="input-group-addon">
+                                         <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label">treatement duration in days</label>
+                                        <input type="number" class="form-control" placeholder="treatement duration" name="treatment_duration">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label">weight</label>
+                                        <input type="text" class="form-control" placeholder="weight" name="weight">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label">prescription</label>
+                                        <input type="text" class="form-control" placeholder="prescription" name="prescription">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label">vet name</label>
+                                        <input type="text" class="form-control" placeholder="vet name" name="vet_name">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label">vet id</label>
+                                        <input type="text" class="form-control" placeholder="vet id" name="vet_id">
+                                    </div>
+                                </div>
+
+
+                                <button class="btn btn-block btn-primary form-control" type="submit">submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/public/static/jquery2.min.js"></script>
+    <script src="/public/static/moment.js"></script>
+    <script src="/public/static/datetimepicker.min.js"></script>
+    <link rel="stylesheet" href="/public/static/bootstrap-datetimepicker.css">
+
+    <script>
+        $(function() {
+            $('#date').datetimepicker();
+        })
+    </script>
+    {% include 'headers/footers.html' %}

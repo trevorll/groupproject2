@@ -1,0 +1,37 @@
+{% include 'headers/headers.html' %} {% include 'headers/adminnav.html' %}
+
+<title>"form-control-label"</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h1>Dairy Farm management system</h1>
+                <h2>death records</h2>
+                {% for message in get_flashed_messages() %} {{message}} {% endfor %}
+                <form action="{{url_for('deathrecord')}}" method="post">
+                    <div class="form-group">
+                        <label class="form-control-label"> cowtag id </label>
+                        <input class="form-control" placeholder="cowtag_id" type="text" name="cowtag_id" id="">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-cntrol-label"> cause_of_death </label>
+                        <input class="form-control" placeholder="cause_of_death" type="text" name="cause_of_death" id="">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-cntrol-label"> date_of_death </label>
+                        <input class="form-control" placeholder="date_of_death" type="date" name="date_of_death" id="">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-cntrol-label"> admin_national_id </label>
+                        <input class="form-control" placeholder="admin_national_id" type="text" name="admin_national_id" id="">
+                    </div>
+                    <input class="btn btn-primary" value="submit" type="submit" />
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

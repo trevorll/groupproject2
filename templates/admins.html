@@ -1,0 +1,116 @@
+{% include 'headers/headers.html' %}{% if 'admin' in session %}
+{% include 'headers/adminnav.html' %}
+  {% elif 'superadmin' in session %}
+  {% include 'headers/adminnav.html' %}
+{% endif %}
+
+
+<!--NAVIGATION BAR FOR ADMIN-->
+
+
+<header id="main-header" class="py-2 bg-primary text-white">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <h1><i class="fa fa-users"></i>Admins</h1>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+
+<!-- USERS -->
+<section>
+  <div onLoad="JavaScript:timeRefresh(60000);" class="container">
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div id="dvContainer">
+          <div class="card-header">
+            <h4>Users</h4>
+          </div>
+          {% for message in get_flashed_messages() %} <span class="text-center">{{message}}</span> {% endfor %}
+          <table class="table table-striped">
+            <thead class="thead-inverse">
+              <tr>
+                <th>Name</th>
+                <th>User name</th>
+                <th>Email</th>
+                 <th>Gender</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+
+           {% for admin in  admin %}
+             
+           
+                <tr>
+                <td>{{admin.first_name }}  {{admin.last_name}}</td>
+                <td>{{admin.username}}</td>
+                <td><a href="https://mail.google.com/mail/u/0/?view=cm&fs=1&tf=1&source=mailto&to={{admin.email}}">{{ admin.email }}</a></td>
+                 <td>{{admin.gender}}</td>
+                 <td> <a href="#" data-target="#updaterecordsmodal" data-toggle="modal" class="btn btn-warning btn-block">
+                  <i class="fa fa-pen"></i>Edit
+              </a></td>
+              </tr>
+              <div class="modal fade" id="updaterecordsmodal">
+                <div class="modal-dialog modal-lg bg-primary">
+                    <div class="modal-content">
+                        <div class="modal-header text-white bg-primary">
+                            <h1 class="modal-title" id="updaterecordsslabel">update details</h1>
+                            <button class="close" data-dismiss="modal" type="button">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{url_for('update_admin_details')}}" method="POST">
+                                <div class="form-group">
+                                    <label class="form-control-label">first name</label>
+                                    <input type="text" class="form-control" value="{{admin.first_name}}" name="first_name" placeholder="first name">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">last name</label>
+                                    <input type="text" class="form-control" value="{{admin.last_name}}" name="last_name" placeholder="last name">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">other name</label>
+                                    <input type="text" class="form-control" value="{{admin.other_names}}" name="other_names" placeholder="other names">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">phone number</label>
+                                    <input type="tel" id="phone" class="form-control w-100" value="{{admin.phone_number}}" name="phone_number">
+                                    <p class="hide" id="result"></p>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">email address</label>
+                                    <input type="email" class="form-control" value="{{admin.email}}" name="email_address" placeholder="email address">
+                                </div>
+                                <div class="form-group">
+                                  <label class="form-control-label">national_id</label>
+                                  <input type="text" class="form-control" value="{{admin.national_id}}" name="admin_national_id" hidden>
+                              </div>
+                                <button type="submit" class="btn btn-primary btn-block">submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+              </div>
+              {% endfor %}
+            </tbody>
+          </table>
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="/public/static/jquery3.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="/public/static/bootstrap3.min.js"></script>
+
+
+
+{% include 'headers/footers.html' %}

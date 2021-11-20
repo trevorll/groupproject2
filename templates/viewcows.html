@@ -1,0 +1,39 @@
+{% include 'headers/headers.html' %}
+<div class="text-center">
+    <h1>AVAILABLE COWS ON SALE</h1>
+</div>
+<section id="view_cows" class="container-fluid">
+    <div onLoad="JavaScript:timeRefresh(60000);" class="container">
+
+        <div class="row">
+            {% for cow in cows %}
+            <div class="card col-md-3 text-center">
+                <div class="card-body">
+                    <h5 class="card-title"> {{cow.cow_tag_id}} </h5>
+                    <img src="/public/img/{{cow.cow_image}}" alt="">
+                    <p class="text-muted">
+                        <small class="text-muted">breed : {{cow.cow_breed}}</small>
+                    </p>
+                    <p class="text-muted">
+                        <small class="text-muted">status : {% if cow.cow_status==True %}
+                            Available
+                        {% endif %} </small>
+                    </p>
+                    <p class="text-muted">
+                        <small class="text-muted">price in ksh: <b>{{cow.cow_price}}</b></small>
+                    </p>
+                    {% if 'user' in session %} {% if cow.cow_price %}
+                    <form action="{{url_for('pay')}}" method="post">
+                        <input type="number" name="amount" readonly class="btn btn-primary btn-block" value="{{cow.cow_price}}">
+                        <input type="submit" value="Buy" class="btn btn-primary btn-block">
+                    </form>
+                    {% endif %} {%elif 'admin' in session%} {%else%}
+                    <a href="{{url_for('login')}}" class="btn btn-block btn-primary">Buy</a> {% endif %}
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% include 'headers/footers.html' %}

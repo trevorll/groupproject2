@@ -1,0 +1,306 @@
+{%include 'headers/headers.html'%} {% include '/headers/adminnav.html'%}
+
+<body>
+    <section id="action" class="py-4 mb-4">
+        <div class="container">
+            <div class="row mt-3">
+                <div class="col-md-2" mr-auto>
+                    {% if admin.role=="cow info admin" %}
+                    <a href="#" data-target="#cowrecordmodal" data-toggle="modal" class="btn btn-info btn-block">
+                        <i class="fa fa-plus"></i>enter cow records
+                    </a>
+                    {% elif admin.role=="health admin" or admin.role=="vaccine inventory admin" %}
+                    <a href="#" data-toggle="modal" data-target="#enterrecordmodal" class="btn btn-info btn-block">
+                        <i class="fa fa-plus"></i>enter new details
+                    </a>
+                    {% elif admin.role=="milk admin" %}
+                    <a href="#" data-target="#milkrecordmodal" data-toggle="modal" class="btn btn-info btn-block">
+                        <i class="fa fa-plus"></i>enter milk records
+                    </a>
+                    {% elif admin.role=="feeds admin" %}
+                    <a href="#" data-target="#feedrecordmodal" data-toggle="modal" data-dismiss="modal" class="btn btn-info btn-block">
+                        <i class="fa fa-plus"></i>cow feed records
+                    </a>
+                    {% elif admin.role=="calving admin" %}
+                    <a href="#" data-target="#calvingmodal" data-toggle="modal" data-dismiss="modal" class="btn btn-info btn-block">
+                        <i class="fa fa-print"></i>enter records
+                    </a>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="col-md-2">
+                    {% if admin.role=="cow info admin" %}
+                    <a href="#" data-target="#cowreportdmodal" data-toggle="modal" class="btn btn-info btn-block">
+                        <i class="fa fa-print"></i>generate report
+                    </a>
+                    {% elif admin.role=="health admin" or admin.role=="vaccine inventory admin" %}
+                    <a href="#" data-toggle="modal" data-target="#enterreportmodal" class="btn btn-info btn-block">
+                        <i class="fa fa-print"></i>generate report
+                    </a>
+                    {% elif admin.role=="milk admin" %}
+                    <a href="#" data-target="#milkreportmodal" data-toggle="modal" class="btn btn-info btn-block">
+                        <i class="fa fa-print"></i>generate report
+                    </a>
+                    {% elif admin.role=="feeds admin" %}
+                    <a href="#" data-target="#cowfeedreportmodal" data-toggle="modal" data-dismiss="modal" class="btn btn-info btn-block">
+                        <i class="fa fa-print"></i>generate report
+                    </a>
+                    {% elif admin.role=="calving admin" %}
+                    <a href="#" data-target="#calvingreportmodal" data-toggle="modal" data-dismiss="modal" class="btn btn-info btn-block">
+                        <i class="fa fa-print"></i>generate report
+                    </a>
+
+                    {% endif %}
+
+                </div>
+                <div class="col-md-2">
+                    <a href="{{url_for('staffs')}}" class="btn btn-warning btn-block">
+                        <i class="fa fa-pen"></i>add staff
+                    </a>
+                </div>
+                <div class="col-md-2">
+                    <a href="#" data-target="#changepasswordmodal" data-toggle="modal" class="btn btn-danger btn-block">
+                        <i class="fa fa-pen"></i>change password
+                    </a>
+                </div>
+                <div class="col-md-2">
+                    <a href="{{url_for('logout')}}" class="btn btn-warning btn-block">
+                        <i class="fa fa-pen"></i>logout
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <div class="row mt-5">
+        <div class=" ml-auto">
+            <div class="card text-center text-white bg-success p-3 mb-3 justify-content-center " style="height: 25vh;">
+                <h3>users</h3>
+                <h1 class="display-4">
+                    <a href="{{url_for('farmer')}}" class="btn btn-outline-light">view</a></h1>
+            </div>
+        </div>
+        <div class=" ml-auto">
+            <div class="card text-center text-white bg-primary p-3 mb-3 justify-content-center " style="height: 25vh;">
+                <h3>cows</h3>
+                <h1 class="display-4">
+                    <a href="{{url_for('view')}}" class="btn btn-outline-light">view</a></h1>
+            </div>
+        </div>
+    </div>
+    {% for message in get_flashed_messages() %} <span class="text-white text-center">{{message}}</span> {% endfor %}
+
+</body>
+<div class="modal fade" id="updatedetailsmodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-white bg-primary">
+                <h3 class="modal-title" id="updatedetailslabel">update details</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post">
+                    <div class="form-group">
+                        <label class="form-control-label" for="vaccine_name">vaccine name</label>
+                        <input type="text" class="form-control" name="vaccine_name" placeholder="vaccine name">
+                    </div>
+                    <button class="btn btn-primary" type="submit">submit</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="enterrecordmodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-white bg-primary">
+                <h3 class="modal-title" id="updatedetailslabel">enter new record</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <a href="{{url_for('health')}}" class="btn btn-primary btn-block">health details</a>
+                <a href="{{url_for('vaccineinventory')}}" class="btn btn-primary btn-block">vaccine inventory</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="calvingmodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-white bg-primary">
+                <h3 class="modal-title" id="calvingmodal">enter new record</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <a href="{{url_for('calving')}}" class="btn btn-primary btn-block">calving details</a>
+                <a href="{{url_for('deathrecord')}}" class="btn btn-primary btn-block">death records</a>
+                <a href="{{url_for('inseminationrecord')}}" class="btn btn-primary btn-block">insemination record</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="milkrecordmodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-white bg-primary">
+                <h3 class="modal-title" id="milkrecordmodal">enter new record</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <a href="{{url_for('milk_sales')}}" class="btn btn-primary btn-block">milk sale</a>
+                <a href="{{url_for('milk_collections')}}" class="btn btn-primary btn-block">milk collection</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="cowrecordmodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-white bg-primary">
+                <h3 class="modal-title" id="cowrecordmodal">enter new record</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <a href="{{url_for('cowinfo')}}" class="btn btn-primary btn-block">enter cow info</a>
+                <a href="{{url_for('cowscat')}}" class="btn btn-primary btn-block">cows category</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="feedrecordmodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-white bg-primary">
+                <h3 class="modal-title" id="feedrecordmodal">enter new record</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <a href="{{url_for('cowfeedinventori')}}" class="btn btn-primary btn-block">cow feed inventory</a>
+                <a href="{{url_for('feed')}}" class="btn btn-primary btn-block">cow feeding record</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cowfeedreportmodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-white bg-primary">
+                <h3 class="modal-title" id="cowinforeportmodal">Print Reports</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <a href="{{url_for('cowsfeedinventory_report')}}" class="btn btn-primary btn-block">cow feed inventory</a>
+                <a href="{{url_for('cowsfeeding_report')}}" class="btn btn-primary btn-block">cow feeding record</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="milkreportmodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-white bg-primary">
+                <h3 class="modal-title" id="milkreportmodal">Print Reports</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <a href="{{url_for('milksale_report')}}" class="btn btn-primary btn-block">milk sale</a>
+                <a href="{{url_for('milkcollection_report')}}" class="btn btn-primary btn-block">milk collection</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="enterreportmodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-white bg-primary">
+                <h3 class="modal-title" id="enterreportmodal">Print Reports</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <a href="{{url_for('healthinfo_report')}}" class="btn btn-primary btn-block">health details</a>
+                <a href="{{url_for('vaccineinventory_report')}}" class="btn btn-primary btn-block">vaccine inventory</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="cowreportdmodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-white bg-primary">
+                <h3 class="modal-title" id="cowreportmodal">Print report</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <a href="{{url_for('cowinfo_report')}}" class="btn btn-primary btn-block">enter cow info</a>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="changepasswordmodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-center text-white bg-danger">
+                <h2 class="modal-title" id="changepasswordlabel">Change password</h2>
+                <button type="button" data-dismiss="modal" class="close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="{{url_for('changepassword')}}" method="POST">
+                    <div class="form-group">
+                        <label class="form-group-label">Old password</label>
+                        <input type="password" name="old_password" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-group-label">New password</label>
+                        <input type="password" name="new_password" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-group-label">Confirm password</label>
+                        <input type="password" name="confirm_password" class="form-control">
+                    </div>
+                    <input type="submit" value="Change" class="btn btn-primary btn-block" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="calvingreportmodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-white bg-primary">
+                <h3 class="modal-title" id="calvingreportmodal">Generate Report</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <a href="{{url_for('calving_report')}}" class="btn btn-primary btn-block">calving report</a>
+                <a href="{{url_for('death_report')}}" class="btn btn-primary btn-block">death report</a>
+                <a href="{{url_for('inseminations_report')}}" class="btn btn-primary btn-block">insemination report</a>
+            </div>
+        </div>
+    </div>
+    <script src="/public/static/jquery3.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="/public/static/bootstrap3.min.js"></script>
+
+    <style>
+        .card {
+            float: right !important;
+            width: 48vh !important;
+        }
+    </style>
+    {% include 'headers/footers.html' %}

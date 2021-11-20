@@ -1,0 +1,54 @@
+{% include 'headers/headers.html' %} {% include 'headers/adminnav.html' %}
+
+
+
+
+<body class="bg-dark container-fluid" style="background-image: url('/public/static/images/cow.jpg'); background-size:cover ;height: 100%;background-position: center; background-blend-mode: overlay; background-repeat: no-repeat;height:100vh;">
+    <div style="opacity: 0.9">
+        <div class="container-fluid">
+            <h1 class="text-center">DAIRY FARM MANAGEMENT SYSTEM</h1>
+            <div class="row mt-3">
+                <div class="col-md-6 offset-md-3 ">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="text-center">COW FEED RECORDS</h2>
+                        </div>
+                        <div class="card-body">
+                            {% for message in get_flashed_messages() %} {{message}} {% endfor %}
+                            <form action="" method="POST">
+                                <div class="form-group">
+                                    <label class="form-control-label">Type of food</label>
+                                    <input type="text" name="type_of_food" class="form-control" placeholder="type of food">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">Cow tag ID</label>
+                                    <input type="text" name="cow_tag_id" class="form-control" placeholder="cow tag ID">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">Food Name</label>
+                                    <input type="text" name="cow_feed_name" class="form-control" placeholder="Name of feed">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">Quantity Fed(in kg)</label>
+                                    <input type="number" name="quantity_fed" class="form-control" placeholder="quantity">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">Time of feeding</label>
+                                    <input type="text" name="time_fed" class="form-control" placeholder="time of feeding">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">Feeding personnel</label>
+                                    <input type="text" name="feeding_personnel" class="form-control" placeholder="feeding personnel">
+                                </div>
+                                <input type="submit" class="btn btn-primary btn-block" value="save">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

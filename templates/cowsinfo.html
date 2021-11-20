@@ -1,0 +1,87 @@
+{% include 'headers/headers.html' %} {% include 'headers/adminnav.html' %}
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="text-center">
+                    <h1>DAIRY FARM MANAGEMENT</h1>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title text-center">
+                            <h2>FILL COWS INFO</h2>
+                        </div>
+                    </div>
+                    {% for message in get_flashed_messages() %} {{ message }} {% endfor %}
+                    <div class="card-body">
+                        <form action="{{url_for('cowinfo')}}" enctype="multipart/form-data" method="post">
+
+                            <div class="form-group ">
+                                <label class="form-control-label">cow_tag_id</label>
+                                <input type="string" class="form-control" name="cow_tag_id" placeholder="cow_tag id" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label" for="cow_breed">cow breed</label>
+                                <select name="cow_breed" class="form-control" id="">
+                                    <option value="">select breed</option>
+                                    <option value="fresian">friesian</option>
+                                    <option value="ayrshire">ayrshire</option>
+                                    <option value="guernsey">guernsey</option>
+                                    <option value="jersey">jersey</option>
+                                </select>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="form-control-label">date of birth</label>
+                                <div class='input-group date' id='datetimepicker2'>
+                                    <input name="date_of_birth" type='text' placeholder="date of birth" id="date" class="form-control" />
+                                    <span class="input-group-addon">
+                                 <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">weight</label>
+                                    <input type="string" class="form-control" placeholder="weight" name="weight">
+                                </div>
+
+
+
+                                <div class="form-group ">
+                                    <label class="form-control-label">sex</label>
+                                    <select name="gender" class="form-control">                                    
+                                    <option  selected>select</option>
+                                    <option value="male">male</option>
+                                    <option value="female">female</option>                              
+                                
+                                </select>
+                                </div>
+
+
+
+                                <div class="form-group" id></div>
+                                <label class="upload_image">upload image</label>
+                                <input type="file" name="image" value="file" class="form-control">
+                            </div>
+                            <button class="btn btn-block btn-primary form-control" type="submit">submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="/public/static/jquery2.min.js"></script>
+<script src="/public/static/moment.js"></script>
+<script src="/public/static/datetimepicker.min.js"></script>
+<link rel="stylesheet" href="/public/static/bootstrap-datetimepicker.css">
+
+<script>
+    $(function() {
+        $('#date').datetimepicker();
+    })
+</script>
+
+</html>

@@ -1,0 +1,204 @@
+{% include 'headers/headers.html' %}
+
+<div class="text-center">
+    <div style="opacity: 0.9;">
+        <h1>DAIRY MANAGEMENT SYSTEM</h1>
+    </div>
+</div>
+
+<body class="bg-dark container-fluid" style="background-image: url('/public/static/images/cow.jpg'); background-size:cover ;height: 100%;background-position: center; background-blend-mode: overlay; background-repeat: no-repeat;height:100vh;">
+    <div style="opacity: 0.9">
+
+        <div class="container-fluid mt-5">
+            <div class="row">
+                <div class="col-md-6 offset-md-3 ">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title text-center">
+                            </div>
+                        </div>
+                        {% for message in get_flashed_messages() %} {{ message }} {% endfor %}
+                        <div class="card-body">
+                            <form class="p-3" {% if 'superadmin' in session %} action="{{url_for('adminsignup')}}" {%else%} action="{{url_for('verifyuser')}}" {% endif %} method="post">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="first_name">first name</label>
+                                        <input type="text" class="form-control" name="first_name" placeholder="first name" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label">last name</label>
+                                        <input type="text" class="form-control" placeholder="last name" name="last_name" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label">other names</label>
+                                        <input type="text" class="form-control" placeholder="other names" name="other_names">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label ">email</label>
+                                        <input type="email" class="form-control" placeholder="email" name="email" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label">phone number</label><br>
+                                        <input type="tel" id="phone" class="form-control w-100" name="phone_number" required>
+
+                                        <p class="hide" id="result"></p>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="national_id">national_id</label>
+                                        <input type="number" class="form-control" {% if 'superadmin' in session %} name="admin_national_id" {%else%} name="farmer_national_id" {% endif %} placeholder="national id" required>
+                                    </div>
+                                </div>
+
+                                {% if 'superadmin' in session %}
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label ">staff id</label>
+                                        <input type="text" class="form-control" placeholder="staff id" name="staff_id" required>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label ">role</label>
+                                        <select name="role" id="" class="form-control">
+                                            <option value=""selected>select role</option>
+                                            <option value="feeds admin">feeds admin</option>
+                                            <option value="cow info admin">cows information admin</option>
+                                            <option value="health admin">health admin</option>
+                                            <option value="calving admin">calving admin</option>
+                                            <option value="milk admin">milk collection and sale </option>
+
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label ">password</label>
+                                        <input type="password" class="form-control" placeholder="password" name="password" required>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label ">confirm_password</label>
+                                        <input type="password" class="form-control" placeholder="confirm password" name="confirm_password" required>
+                                    </div>
+
+                                </div>
+
+                                {% endif %}
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label">gender</label>
+                                        <select name="gender" class="form-control">                                    
+                                            <option class="form-control" selected>select</option>
+                                            <option class="form-control" value="male">male</option>
+                                            <option class="form-control" value="female">female</option>                              
+                                        
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6 ">
+                                        <label class="form-control-label ">username</label>
+                                        <input type="text" id="username" placeholder="username" name="username" class="form-control" required>
+                                        <span id='message'></span>
+                                    </div>
+                                </div>
+
+                                <input type="submit" value="submit" class="btn btn-primary btn-block">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="row">
+        <div class='col-sm-6'>
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker2'>
+                    <input type='text' id="date" class="form-control" />
+                    <span class="input-group-addon">
+                 <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+</body> -->
+    {% set j = admin %}
+    <meta id="admin" data-admin="{{ admin|safe }}">
+
+    <script>
+        var input = document.querySelector("#phone"),
+            errorMsg = document.querySelector("#result"),
+            validMsg = document.querySelector("#result");
+
+        // here, the index maps to the error code returned from getValidationError - see readme
+        var errorMap = ["Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
+
+        // initialise plugin
+        var iti = window.intlTelInput(input, {
+            utilsScript: "/public/static/js/utils.js",
+            initialCountry: "ke",
+        });
+
+        var reset = function() {
+            input.classList.remove("error");
+            errorMsg.innerHTML = "";
+            errorMsg.classList.add("hide");
+            validMsg.classList.add("hide");
+        };
+
+        // on blur: validate
+        input.addEventListener('blur', function() {
+            reset();
+            if (input.value.trim()) {
+                if (iti.isValidNumber()) {
+                    validMsg.classList.remove("hide");
+                } else {
+                    input.classList.add("error");
+                    var errorCode = iti.getValidationError();
+                    errorMsg.innerHTML = errorMap[errorCode];
+                    errorMsg.classList.remove("hide");
+                }
+            }
+        });
+
+        // on keyup / change flag: reset
+        input.addEventListener('change', reset);
+        input.addEventListener('keyup', reset);
+    </script>
+    {% if 'superadmin' in session %}
+    <script>
+        var username = document.querySelector("#username");
+
+
+
+        $('#username').on('keyup', function() {
+            '{% for a in j %}'
+            if (username.value.toLowerCase() == '{{a.username}}'.toLowerCase()) {
+                $('#message').html('Pick another username').css('color', 'red');
+                $('#button').removeClass("d-none");
+
+            }
+
+            '{% endfor %}'
+
+
+        });
+        username.addEventListener('change', function() {
+            var reset = function() {
+                $('#username').classList.remove("message");
+                $('#message').innerHTML = "";
+                $('#message').classList.add("hide");
+                $('#message').classList.add("hide");
+            };
+        });
+    </script>
+    {% endif %}
+
+
+
+
+
+    </html>

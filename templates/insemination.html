@@ -1,0 +1,97 @@
+{% include 'headers/headers.html' %}{% include '/headers/adminnav.html'%}
+
+
+<body class="container-fluid bg-dark" style="background-image: url('/public/static/images/istockphoto-1297005217-612x612.jpg'); background-size:cover;background-blend-mode:overlay; height:100vh">
+    <div style="opacity:0.9">
+        <div>
+            <h1 class="text-center">DAIRY FARM MANAGEMENT</h1>
+        </div>
+        <div class="container-fluid mt-5">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <div class="card-title">
+                                <h2>INSEMINATION RECORD</h2>
+                            </div>
+                        </div>
+                        {% for message in get_flashed_messages() %} {{ message }} {% endfor %}
+                        <div class="card-body">
+
+                            <form action="{{url_for('inseminationrecord')}}" method="post">
+                                <div class="form-group">
+                                    <label class="form-control-label">Cow Tag Id</label>
+                                    <input type="text" class="form-control" name="cow_tag_id" placeholder="cow tag id">
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-control-label">date of insemination</label>
+                                    <div class='input-group date' id='datetimepicker2'>
+                                        <input name="date_of_insemination" type='text' placeholder="date of insemination" id="date" class="form-control" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="form-control-label" for="breed">Breed</label>
+                                    <input type="text" class="form-control" name="breed" placeholder="breed">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-control-label" for="sperm_dose">Sperm Dose</label>
+                                    <input type="number" class="form-control" name="sperm_dose" placeholder="sperm dose">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-control-label" for="insemination_officer">Insemination Officer</label>
+                                    <input type="text" class="form-control" name="insemination_officer" placeholder="insemination officer">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-control-label" for="no_of_inseminations">Number Of Insemination Per Conception</label>
+                                    <input type="number" class="form-control" name="no_of_inseminations" placeholder="no_of inseminations">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-control-label" for="insemination_officer_id">Insemination Officer Id</label>
+                                    <input type="number" class="form-control" name="insemination_officer_id" placeholder="insemination officer id">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-control-label">Age at insemination</label>
+                                    <input type="text" class="form-control" name="age_at_insemination" placeholder="age at insemination">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">Insemination Officer Phone number</label>
+                                    <input type="text" class="form-control" name="insemination_officer_contact" placeholder="Insemination Officer Phone number">
+                                </div>
+
+                                <input class="btn btn-primary btn-block" value="submit" type="submit" \>
+
+
+
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script src="/public/static/jquery2.min.js"></script>
+    <script src="/public/static/moment.js"></script>
+    <script src="/public/static/datetimepicker.min.js"></script>
+    <link rel="stylesheet" href="/public/static/bootstrap-datetimepicker.css">
+
+    <script>
+        $(function() {
+            $('#date').datetimepicker();
+        })
+    </script>
+
+    {% include 'headers/footers.html' %}
