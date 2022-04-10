@@ -1,0 +1,36 @@
+{% include 'headers/headers.html' %} {% include 'headers/nav.html' %}
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <h1 class="text-center">Dairy Farm management system</h1>
+                <h2><u>Customer signup</u> </h2>
+                <p>
+                    By clicking on the <span class="text-primary">signup</span> button, it takes you to the sign up page. For you to sign up into the Dairy Farm management system , You are required to enter the required details on the user sign up page.
+                    Then submit. A one time password is sent to the email provided and you can change to a more memorable and favorite password by clicking the 'change password' button. If you have an account already,just log into the system.
+                </p>
+                <h3><u>Customer Login</u></h3>
+                <p>
+                    By clicking on the <span class="text-primary">login</span> button, it takes you to the login page. For you to log into the system,You are required to provide the username and password provided during signup. After providing the username
+                    and the password, you will be logged into the system. Incase you forgot the password,you can click the <span class="text-primary">reset password</span> link that will direct you to the email for the new password.
+                </p>
+                <p>
+                    Once logged into the system, you can buy cows and order milk.
+                </p>
+                <div class="">
+                    <a class="col-md-6" href="{{url_for('login')}}"><button class="btn btn-primary btn-block" type="button">login</button></a>
+                    <a class="col-md-6" href="{{url_for('signup')}}"><button class="btn btn-primary btn-block" type="button">signup</button></a>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="/public/static/jquery3.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="/public/static/bootstrap3.min.js"></script>
+
+{% include 'headers/footers.html' %}

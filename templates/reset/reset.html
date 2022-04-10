@@ -1,0 +1,75 @@
+{% include 'headers/headers.html' %} {% include 'headers/headers.html' %}
+
+<div class="text-center">
+    <div style="opacity: 0.9;">
+        <h1>DAIRY MANAGEMENT SYSTEM</h1>
+    </div>
+</div>
+
+<body class="bg-dark container-fluid" style="background-image: url('/public/static/images/cow.jpg'); background-size:cover ;height: 100%;background-position: center; background-blend-mode: overlay; background-repeat: no-repeat;height:100vh;">
+    <div style="opacity: 0.9">
+
+        <div class="container-fluid mt-5">
+            <div class="row">
+                <div class="col-md-6 offset-md-3 ">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title text-center">
+                            </div>
+                        </div>
+                        <div class="text-center"> {% with messages = get_flashed_messages(with_categories=true) %} {% for category, message in messages %}
+                            <div class="{{ category }}">{{ message }}</div>
+                            {% endfor %} {%endwith%} </div>
+                        <div class="card-body">
+                            <form class="p-3" action="{{ url_for('reset_pass_request')}}" method="post">
+
+                                <div class="form-group">
+                                    <label class="form-control-label">Username</label>
+                                    <div class="input-group">
+                                        <input type="text" name="username" placeholder="Username" class="form-control">
+                                        <span class="input-group-btn">
+                                                <span class="btn btn-primary"><i  class=" fa fa-user"></i></span>
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">Email</label>
+                                    <div class="input-group">
+                                        <input type="email" name="email" placeholder="Email" class="form-control">
+                                        <span class="input-group-btn">
+                                                <span class="btn btn-primary"><i  class=" fa fa-envelope"></i></span>
+                                    </div>
+
+                                </div>
+
+                                <input type="submit" value="Submit" class="btn btn-primary btn-block">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    {% include 'headers/footers.html' %}
+    <script>
+        function viewPassword() {
+            var passwordInput = document.getElementById('password');
+            var passStatus = document.getElementById('pass-status');
+
+            if (passwordInput.type == 'password') {
+                passwordInput.type = 'text';
+                passStatus.class = 'fa fa-eye-slash';
+
+            } else {
+                passwordInput.type = 'password';
+                passStatus.class = 'fa fa-eye';
+            }
+        }
+    </script>
+
+    </html>

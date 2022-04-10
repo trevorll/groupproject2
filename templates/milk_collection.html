@@ -3,7 +3,7 @@
 <body class="container-fluid bg-dark" style="background-image: url('/public/static/images/istockphoto-1297005217-612x612.jpg'); background-size:cover;background-blend-mode:overlay; height:100vh">
     <div style="opacity:0.9">
         <div>
-            <h1 class="text-center">DAIRY FARM MANAGEMENT</h1>
+            <h1 class="text-center">DAIRY FARM MANAGEMENT SYSTEM</h1>
         </div>
         <div class="container-fluid mt-5">
             <div class="row">
@@ -14,28 +14,31 @@
                                 <h2>MILK COLLECTION FORM</h2>
                             </div>
                         </div>
-                        {% for message in get_flashed_messages() %} {{ message }} {% endfor %}
+                        <div class="text-center"> {% with messages = get_flashed_messages(with_categories=true) %} {% for category, message in messages %}
+                            <div class="{{ category }}">{{ message }}</div>
+                            {% endfor %} {%endwith%} </div>
                         <div class="card-body">
                             <form action="{{url_for('milk_collections')}}" enctype="multipart/form-data" method="post">
 
                                 <div class="form-group">
                                     <label class="form-control-label">Milk Quantity</label>
-                                    <input type="text" class="form-control" name="milk_quantity" placeholder="Milk quantity" required>
+                                    <input type="number" class="form-control" min="1" name="milk_quantity" placeholder="Milk quantity" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="status">Milk Quality</label>
-                                    <input type="status" class="form-control" name="milk_quality" placeholder="Milk quality" required>
+                                    <select name="milk_quality" class="form-control" id="" required>
+                                        <option value="" selected></option>
+                                        <option value="high">high</option>
+                                        <option value="medium">medium</option>
+                                        <option value="low">low</option>
+                                    </select>
                                 </div>
 
 
-                                <div class="form-group">
-                                    <label class="form-control-label">Milking Personnel</label>
-                                    <input type="text" class="form-control" placeholder="Milking Personnel" name="milking_personnel" required>
-                                </div>
                                 <div class="form-group">
                                     <label class="form-control-label">Milk Collection Time</label>
                                     <select name="milk_collection_time" class="form-control" id="" required>
-                                    <option value="">select time..</option>
+                                    <option value=""></option>
                                     <option value="morning">morning</option>
                                     <option value="evening">evening</option>
                                 </select>
@@ -47,11 +50,22 @@
                                 <div class="form-group">
                                     <label class="form-control-label">Milk Collection Date</label>
                                     <div class='input-group date' id='datetimepicker2'>
-                                        <input name="milk_collection_date" type='text' placeholder="Milk Collection Date" id="date" class="form-control" />
+                                        <input name="milk_collection_date" type='text' id="date" class="form-control" />
                                         <span class="input-group-addon">
                                      <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="mlking_personel" class="form-control-label"> Milking Personel</label>
+                                    <select name="milking_personel" class="form-control" id="" required>
+                                        <option value="" selected></option>
+                                        {% for item in staff %}
+                                        {% if item.role=='milking personel' %}
+                                        <option value="{{item.staff_id}}">{{item.first_name}} {{item.last_name}}</option>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </select>
                                 </div>
 
                                 <button class="btn btn-block btn-primary form-control" type="submit">submit</button>
@@ -70,8 +84,26 @@
 
     <script>
         $(function() {
-            $('#date').datetimepicker();
+            $('#date').datetimepicker({
+                format: 'yyyy/MM/DD hh:mm A',
+                defaultDate: new Date(),
+                maxDate: new Date(),
+                minDate: new Date() - 1 * 24 * 60 * 60 * 1000,
+                ignoreReadonly: true
+            });
         })
+    </script>
+    <script>
+        $('form').submit(function() {
+            var valid = true;
+            $('input').each(function(i, el) {
+                if (valid && $(el).val() === '' || errorMsg.innerHTML) valid = false;
+                $('#message1').html('Please fill all field').css('color', 'red');
+
+            });
+
+            return valid;
+        });
     </script>
 
     {% include 'headers/footers.html' %}

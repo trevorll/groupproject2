@@ -1,0 +1,83 @@
+{% include './headers/headers.html' %} {% if 'user' in session %} {% include './headers/usernav.html' %}
+
+
+
+<section class="container">
+    <div class="row">
+        <div class="col-md-9 border offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="text-center"> IN YOUR CART</h2>
+                </div>
+                <div class="text-center"> {% with messages = get_flashed_messages(with_categories=true) %} {% for category, message in messages %}
+                    <div class="{{ category }}">{{ message }}</div>
+                    {% endfor %} {%endwith%} </div>
+
+
+
+                <div class="card-block">
+                    <div class="row">
+                        <table class="table table-striped w-45 border">
+
+                            <thead class="thead-inverse">
+                                <div class="text-center">
+                                    <h3></h3>
+                                </div>
+                                <tr>
+                                    <th> cow tag id </th>
+                                    <th> cow price </th>
+                                    <th> cow image</th>
+                                    <th> </th>
+                                </tr>
+                            </thead>
+                            {% for cow in cart_cows %}
+                            <tr>
+                                <td> {{cow.cow_tag_id}} </td>
+                                <td>{{cow.cow_price}}</td>
+                                <td><img style="height: 40px; width:40px" src="/public/img/{{cow.cow_image}}" alt=""></td>
+                                <td>
+                                    <form action="{{url_for('remove_from_cart')}}" method="post">
+                                        <input type="text" name="cow_tag_id" value="{{cow.cow_tag_id}}" id="" hidden>
+                                        <input type="submit" onclick="disabled" value="remove" class="btn btn-primary" id="">
+                                    </form>
+                                </td>
+
+
+                            </tr>
+
+                            {% endfor %}
+
+
+                        </table>
+                        <div>
+                            <div class="col-md-6 offset-md-3">
+                                <button class="btn btn-primary btn-block">Total Price: {{price}}</button>
+                            </div>
+                            <form class="col-md-6 offset-md-3" action="{{url_for('paycow')}}" method="post">
+                                <input type="text" class="btn btn-primary btn-block" name="total_price" value="{{price}}" hidden>
+                                <input type="text" name="get" hidden>
+                                <input type="submit" value="confirm purchase" onclick="disabled" class="btn btn-primary btn-block">
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+</section>
+
+
+
+<!-- jQuery library -->
+<script src="/public/static/jquery3.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="/public/static/bootstrap3.min.js"></script>
+<script src="/public/static/moment.js"></script>
+<script src="/public/static/datetimepicker.min.js"></script>
+<link rel="stylesheet" href="/public/static/bootstrap-datetimepicker.css"> {%else%}
+<h1> OOPS NOT ALLOWED</h1>
+{% endif %} {% include 'headers/footers.html' %}

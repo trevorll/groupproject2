@@ -7,31 +7,71 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6 offset-md-3">
-                <h1>Dairy Farm management system</h1>
-                <h2>death records</h2>
-                {% for message in get_flashed_messages() %} {{message}} {% endfor %}
-                <form action="{{url_for('deathrecord')}}" method="post">
-                    <div class="form-group">
-                        <label class="form-control-label"> cowtag id </label>
-                        <input class="form-control" placeholder="cowtag_id" type="text" name="cowtag_id" id="">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-cntrol-label"> cause_of_death </label>
-                        <input class="form-control" placeholder="cause_of_death" type="text" name="cause_of_death" id="">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-cntrol-label"> date_of_death </label>
-                        <input class="form-control" placeholder="date_of_death" type="date" name="date_of_death" id="">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-cntrol-label"> admin_national_id </label>
-                        <input class="form-control" placeholder="admin_national_id" type="text" name="admin_national_id" id="">
-                    </div>
-                    <input class="btn btn-primary" value="submit" type="submit" />
-                </form>
+                <div class="card">
+
+                    <div class="card-header text-center">DEATH RECORDS</div>
+                    <div class="text-center"> {% with messages = get_flashed_messages(with_categories=true) %} {% for category, message in messages %}
+                        <div class="{{ category }}">{{ message }}</div>
+                        {% endfor %} {%endwith%} </div>
+                    <form action="{{url_for('deathrecord')}}" method="post">
+                        <div class="form-group">
+                            <label class="form-control-label"> cowtag id </label>
+                            <input class="form-control" placeholder="cow tag id" type="text" name="cow_tag_id" id="">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-cntrol-label"> cause of death </label>
+                            <input class="form-control" placeholder="cause of death" type="text" name="cause_of_death" id="">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label">date of death</label>
+                            <div class='input-group date' id='datepicker2'>
+                                <input name="date_of_death" type='text' id="date" class="form-control" />
+                                <span class="input-group-addon">
+                         <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group" hidden>
+                            <label class="form-cntrol-label"> admin national id </label>
+                            <input class="form-control" placeholder="admin national id" type="text" name="admin_national_id" id="">
+                        </div>
+                        <input class="btn btn-primary btn-block" value="submit" type="submit" />
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+
+    </div>
+    </div>
 </body>
+<script>
+    $('form').submit(function() {
+        var valid = true;
+        $('input').each(function(i, el) {
+            if (valid && $(el).val() === '' || errorMsg.innerHTML) valid = false;
+            $('#message1').html('Please fill all field').css('color', 'red');
+
+        });
+
+        return valid;
+    });
+</script>
+<script src="/public/static/jquery2.min.js"></script>
+<script src="/public/static/moment.js"></script>
+<script src="/public/static/datetimepicker.min.js"></script>
+<link rel="stylesheet" href="/public/static/bootstrap-datetimepicker.css">
+<script>
+    $(function() {
+        $('#date').datetimepicker({
+            format: 'yyyy/MM/DD hh:mm A',
+            defaultDate: new Date(),
+            maxDate: new Date(),
+            minDate: new Date() - 2 * 24 * 60 * 60 * 1000,
+            ignoreReadonly: true
+        });
+    })
+</script>
 
 </html>

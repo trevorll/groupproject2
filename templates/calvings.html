@@ -1,0 +1,43 @@
+{% include 'headers/headers.html' %}{% include 'headers/adminnav.html' %}
+<section>
+    <div onLoad="JavaScript:timeRefresh(60000);" class="container">
+        <div class="row">
+
+
+
+            <div class="col">
+                <div class="card">
+                    <div id="dvContainer">
+                        <div class="card-header">
+                        </div>
+                        <table class="table table-striped w-45 border">
+                            <thead class="thead-inverse">
+                                <div class="text-center">
+                                    <h3>calving information</h3>
+                                </div>
+                                <tr>
+                                    <th> cow tag id </th>
+                                    <th> sex </th>
+                                    <th> breed </th>
+                                    <th> weigth</th>
+                                    <th> date of birth </th>
+                                </tr>
+                            </thead>
+                            {% for item1 in calving_records.items %}
+                            <tr>
+                                <td> {{item1.cow_tag_id}} </td>
+                                <td> {{item1.gender}} </td>
+                                <td> {{item1.breed}} </td>
+                                <td> {{item1.weight}} </td>
+                                <td> {{item1.date_of_birth}} </td>
+
+                            </tr>
+                            {%endfor%}
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

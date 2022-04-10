@@ -1,0 +1,215 @@
+{% include './headers/headers.html' %} {% if 'admin' in session or 'superadmin' in session %} {% include './headers/adminnav.html' %}
+
+
+
+<section class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="text-center"> COW HEALTH INFORMATION</h2>
+                    <div>
+                        <input type="radio" name="" id="check">filter by date of vaccination
+                        <input type="radio" name="" id="check1">other filters
+                    </div>
+
+                    <section id="actions" class="py-4 mb-4 " hidden="true">
+                        <div class="container">
+                            <div class="row col-md-9">
+
+
+                                <form action="{{url_for('search_health_info')}}" method="POST">
+                                    <div>
+                                        <h5 class="text-center"> filter date of vaccination</h5>
+                                    </div>
+                                    <input type="text" name="filter" id="filter" value="date" hidden>
+                                    <div class="input-group">
+                                        <div class="form-group col-md-6">
+                                            <label class="form-control-label">start date</label>
+                                            <div class='input-group date' id='datetimepicker2'>
+                                                <input name="start" type='text' id="date" class="form-control" readonly/>
+                                                <span class="input-group-addon">
+                                             <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="form-control-label">End Date</label>
+                                            <div class='input-group date' id='datetimepicker2'>
+                                                <input name="end" type='text' id="date1" class="form-control" readonly/>
+                                                <span class="input-group-addon">
+                                                 <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <span class="input-group-btn">
+                                            {# <input type="submit" value="search" class="btn btn-primary btn-block"> #}
+                                            <button class="btn btn-primary btn-block"><i class="fa fa-search"></i> </button>
+                                          </span>
+
+
+
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+
+                    </section>
+                    <section id="actions1" class="py-4 mb-4 " hidden="true">
+                        <div class="container ">
+                            <div class="row col-md-6">
+
+
+                                <form action="{{url_for('search_health_info')}}" method="POST">
+                                    <div>
+                                    </div>
+                                    <div class="input-group">
+                                        <div class="form-group">
+                                            <label class="form-control-label">search</label>
+                                            <div class='input-group'>
+                                                <input type="text" name="filter" value="other" hidden>
+                                                <input name="search" type='text' placeholder="search by cow taf id,vaccine name,date of vaccination, disease treated " class="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <span class="input-group-btn">
+                                            {# <input type="submit" value="search" class="btn btn-primary btn-block"> #}
+                                            <button class="btn btn-primary btn-block"><i class="fa fa-search"></i> </button>
+                                          </span>
+
+
+
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+
+                    </section>
+
+
+                    <div class="card-body">
+                        <div class="row">
+                            <table class="table table-striped w-45 border">
+                                <thead class="thead-inverse">
+                                    <div class="text-center">
+                                        <h3>cow health information</h3>
+                                    </div>
+                                    <tr>
+                                        <th> cow tag id </th>
+                                        <th> vaccine name </th>
+                                        <th> date vaccinated </th>
+                                        <th> disease treated</th>
+                                        <th> prescription (ml) </th>
+                                    </tr>
+                                </thead>
+                                {% for record in info.items %}
+                                <tr>
+                                    <td> {{record.cow_tag_id}} </td>
+                                    <td> {{record.vaccine_name}} </td>
+                                    <td> {{record.date_of_vaccination}} </td>
+                                    <td> {{record.disease_treated}} </td>
+                                    <td> {{record.prescription}} </td>
+
+                                </tr>
+                                {% endfor %}
+
+
+                            </table>
+
+
+                            <div class="col-md-12 card">
+                                <nav class="mx-auto mb-2 text-center">
+                                    <ul class="pagination">
+                                        {% if info.has_prev %}
+                                        <li class="page-item">
+                                            <a href="{{url_for('search_health_info',page=info.prev_num)}}">Previous</a>
+                                        </li>
+                                        {% endif %}
+                                        <!-- all page numbers -->
+                                        {% for page_num in info.iter_pages() %} {% if page_num %} {% if page_num != info.page %}
+                                        <li class="page-item">
+                                            <a href="{{url_for('search_health_info',page=page_num)}}">{{page_num}}</a>
+                                        </li>
+                                        {% else %}
+                                        <li class="page-item">
+                                            <a class="active" href="#">{{ page_num }}</a>
+                                        </li>
+                                        {% endif %} {% else %}
+                                        <li class="page-item">
+                                            <span class="ellipsis" style="white-space;nowrap;overflow:hidden;text-overflow:ellipsis">…</span>
+                                        </li>
+                                        {% endif %} {% endfor %}
+                                        <!-- next page -->
+                                        {% if info.has_next %}
+                                        <li class="page-item">
+                                            <a href="{{ url_for('search_health_info', page=info.next_num)}}">Next</a>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- jQuery library -->
+<script src="/public/static/jquery3.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="/public/static/bootstrap3.min.js"></script>
+<script src="/public/static/moment.js"></script>
+<script src="/public/static/datetimepicker.min.js"></script>
+<link rel="stylesheet" href="/public/static/bootstrap-datetimepicker.css">
+<script>
+    $(function() {
+        $('#date').datetimepicker({
+            format: 'yyyy/MM/DD hh:mm A',
+            defaultDate: new Date() - 1000 * 60 * 60 * 24 * 30,
+            maxDate: new Date(),
+            ignoreReadonly: true
+        });
+    })
+</script>
+<script>
+    $(function() {
+        $('#date1').datetimepicker({
+            format: 'yyyy/MM/DD hh:mm A',
+            defaultDate: new Date(),
+            maxDate: new Date(),
+            ignoreReadonly: true
+        });
+    })
+</script>
+<script>
+    $('#check').change(function() {
+        if ($("#actions").attr("hidden", true)) {
+            $("#actions").attr("hidden", false);
+            $("#actions1").attr("hidden", true);
+            $("#check1").prop("checked", false)
+        } else {
+            $("#actions").attr("hidden", true)
+        }
+    })
+</script>
+<script>
+    $('#check1').change(function() {
+        if ($("#actions1").attr("hidden", true)) {
+            $("#actions1").attr("hidden", false);
+            $("#actions").attr("hidden", true);
+            $("#check").prop("checked", false)
+        } else {
+            $("#actions1").attr("hidden", true)
+        }
+    })
+</script>
+{%else%}
+<h1> OOPS NOT ALLOWED</h1>
+{% endif %} {% include 'headers/footers.html' %}

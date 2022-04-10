@@ -1,0 +1,27 @@
+{% include 'headers/headers.html' %} {% if 'user' in session%} {% include 'headers/usernav.html' %}{%else%} {% include 'headers/nav.html' %} {% endif %}
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <h1 class="text-center">Dairy Farm management system</h1>
+                <h2><u>HOW TO RESET PASSWORD</u> </h2>
+                <p>
+                    While logging into the sytem,you might have forgotten your password. The system allows you to reset the password. By clicking on the <a href="{{url_for('reset_pass_request')}}"><span type="button">Reset password</span></a> below the
+                    'password' entry, you are requested to provide an email that can be used to send the one time new password. After providing the email, a one time password is sent to the email provided. You can use the one time password to log into
+                    tthe system then use the 'change password' button to change the password to a more memorable password.
+                </p>
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="/public/static/jquery3.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="/public/static/bootstrap3.min.js"></script>
+
+{% include 'headers/footers.html' %}

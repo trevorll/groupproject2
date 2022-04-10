@@ -1,0 +1,82 @@
+{% include 'headers/headers.html' %}{% if 'admin' in session %} {% include 'headers/adminnav.html' %} {% elif 'superadmin' in session %} {% include 'headers/adminnav.html' %} {% endif %}
+
+
+<!--NAVIGATION BAR FOR ADMIN-->
+
+
+<header id="main-header" class="py-2 bg-primary text-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1><i class="fa fa-users"></i>Admins</h1>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- USERS -->
+
+<body class="bg-dark container-fluid" style="background-image: url('/public/static/images/cow.jpg'); background-size:cover ;height: 100%;background-position: center; background-blend-mode: overlay; background-repeat: no-repeat;height:100vh;">
+    <div style="opacity: 0.9">
+
+        <div class="container-fluid mt-5">
+            <div class="row">
+                <div class="col-md-6 offset-md-3 ">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title text-center">
+                            </div>
+                        </div>
+                        {% for message in get_flashed_messages() %} <span class="text-center">{{message}}</span> {% endfor %}
+
+                        <div class="card-body">
+
+
+
+                            <form action="{{url_for('update_admin_details')}}" method="POST">
+                                <div class="form-group">
+                                    <label class="form-control-label">first name</label>
+                                    <input type="text" pattern="[A-Za-z\\s]*" class="form-control" value="{{admin2.first_name}}" name="first_name" placeholder="first name">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">last name</label>
+                                    <input type="text" pattern="[A-Za-z\\s]*" class="form-control" value="{{admin2.last_name}}" name="last_name" placeholder="last name">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">other name</label>
+                                    <input type="text" pattern="[A-Za-z\\s]*" class="form-control" value="{{admin2.other_names}}" name="other_names" placeholder="other names">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">phone number</label>
+                                    <input type="tel" id="phone" class="form-control w-100" value="{{admin2.phone_number}}" name="phone_number">
+                                    <p class="hide" id="result"></p>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">email address</label>
+                                    <input type="email" class="form-control" value="{{admin2.email}}" name="email_address" placeholder="email address">
+                                </div>
+                                <div class="form-group" hidden>
+                                    <label class="form-control-label">national_id</label>
+                                    <input type="text" class="form-control" value="{{admin2.national_id}}" name="admin_national_id">
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">submit</button>
+                            </form>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+<script src="/public/static/jquery3.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="/public/static/bootstrap3.min.js"></script>
+
+{% include 'headers/footers.html' %}

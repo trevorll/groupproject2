@@ -1,0 +1,24 @@
+{% include 'headers/headers.html' %} {% if 'user' in session%} {% include 'headers/usernav.html' %}{%else%} {% include 'headers/nav.html' %} {% endif %}
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <h1 class="text-center">Dairy Farm management system</h1>
+                <h2><u>Buy cows</u> </h2>
+                <p>
+                    Once logged into the system,you can buy a cow from the available cows. You begin by adding the cow interested in into the cart. After identifying all cows that you want to purchase and adding them to the cart, click on view cart and confirm purchase or
+                    remove any cow you don't want to purchase from cart by clicking remove. If you confirm purchase an stk push is sent to the phone number registered prompting you to enter your Mpesa pin and confirm the payment. You will then fill in
+                    the transaction code from the Mpesa message you received after the payment then click submit. NOTE: An stk push is sent only when you have sufficient Mpesa balance needed for purchase. *Please come with the Mpesa message when picking
+                    milk or the cow bought to confirm your transaction.
+
+                </p>
+
+            </div>
+        </div>
+    </div>
+    <script src="/public/static/jquery3.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="/public/static/bootstrap3.min.js"></script>
+
+    {% include 'headers/footers.html' %}

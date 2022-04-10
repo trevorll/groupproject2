@@ -1,9 +1,9 @@
 {% include 'headers/headers.html' %} {% include 'headers/adminnav.html' %}
 
-<body>
+<body class="bg-dark container-fluid" style="background-image: url('/public/static/images/cow.jpg'); background-size:cover ;height: 100%;background-position: center; background-blend-mode: overlay; background-repeat: no-repeat;height:100vh;">
     <div class="container">
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-8 offset-md-2 responsive">
                 <div class="text-center">
                     <h1>DAIRY FARM MANAGEMENT</h1>
                 </div>
@@ -13,7 +13,9 @@
                             <h2>FILL COWS INFO</h2>
                         </div>
                     </div>
-                    {% for message in get_flashed_messages() %} {{ message }} {% endfor %}
+                    <div class="text-center"> {% with messages = get_flashed_messages(with_categories=true) %} {% for category, message in messages %}
+                        <div class="{{ category }}">{{ message }}</div>
+                        {% endfor %} {%endwith%} </div>
                     <div class="card-body">
                         <form action="{{url_for('cowinfo')}}" enctype="multipart/form-data" method="post">
 
@@ -23,12 +25,11 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-control-label" for="cow_breed">cow breed</label>
-                                <select name="cow_breed" class="form-control" id="">
-                                    <option value="">select breed</option>
-                                    <option value="fresian">friesian</option>
-                                    <option value="ayrshire">ayrshire</option>
-                                    <option value="guernsey">guernsey</option>
-                                    <option value="jersey">jersey</option>
+                                <select name="cow_breed" class="form-control" id="" required>
+                                    <option value=""> select breed</option>
+                                    {% for item in breed  %}
+                                        <option value="{{item.breed}}">{{item.breed}}</option>
+                                        {% endfor %}
                                 </select>
                             </div>
 
@@ -36,21 +37,23 @@
                             <div class="form-group">
                                 <label class="form-control-label">date of birth</label>
                                 <div class='input-group date' id='datetimepicker2'>
-                                    <input name="date_of_birth" type='text' placeholder="date of birth" id="date" class="form-control" />
+                                    <input name="date_of_birth" type='text' id="date" class="form-control" readonly="readonly" />
                                     <span class="input-group-addon">
                                  <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
+
                                 </div>
+                                <span id="message1"></span>
                                 <div class="form-group">
                                     <label class="form-control-label">weight</label>
-                                    <input type="string" class="form-control" placeholder="weight" name="weight">
+                                    <input type="number" min="1" class="form-control" placeholder="weight" name="weight" required>
                                 </div>
 
 
 
                                 <div class="form-group ">
                                     <label class="form-control-label">sex</label>
-                                    <select name="gender" class="form-control">                                    
+                                    <select name="gender" class="form-control" required>                                    
                                     <option  selected>select</option>
                                     <option value="male">male</option>
                                     <option value="female">female</option>                              
@@ -60,17 +63,17 @@
 
 
 
-                                <div class="form-group" id></div>
-                                <label class="upload_image">upload image</label>
-                                <input type="file" name="image" value="file" class="form-control">
-                            </div>
-                            <button class="btn btn-block btn-primary form-control" type="submit">submit</button>
+                                <div class="form-group" id>
+                                    <label class="form-control-label">upload image</label>
+                                    <input type="file" name="image" value="file" class="form-control" required>
+                                </div>
+                                <button class="btn btn-block btn-primary form-control" type="submit">submit</button>
                         </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
 </body>
 <script src="/public/static/jquery2.min.js"></script>
@@ -80,8 +83,29 @@
 
 <script>
     $(function() {
-        $('#date').datetimepicker();
+        $('#date').datetimepicker({
+            format: 'yyyy/MM/DD hh:mm A',
+            defaultDate: new Date(),
+            minDate: new Date(2015, 10 - 1, 25),
+            maxDate: new Date(),
+            ignoreReadonly: true
+        });
     })
 </script>
+<script>
+    $('form').submit(function() {
+        var valid = true;
+        $('input').each(function(i, el) {
+            if (valid && $(el).val() === '' || errorMsg.innerHTML) valid = false;
+            $('#message1').html('Please fill all field').css('color', 'red');
+
+        });
+
+        return valid;
+    });
+</script>
+
+
+
 
 </html>

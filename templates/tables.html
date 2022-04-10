@@ -1,0 +1,384 @@
+{% if 'admin' in session %} {%if admin.role=="cow info admin" %}
+<h4 class="text-center">COW INFORMATION</h4>
+<div class="card-body">
+    <div id="cowinfos" hidden>
+        <table class="table table-striped">
+            <thead class="thead-inverse">
+                <tr>
+                    <th> cow tag id </th>
+                    <th> sex </th>
+                    <th> date of birth </th>
+                    <th> price</th>
+                    <th> weight </th>
+                    <th> breed </th>
+                    <th></th>
+                </tr>
+            </thead>
+            {% for cow in cow.items %}
+            <tr>
+                <td> {{cow.cow_tag_id}} </td>
+                <td> {{cow.cow_gender}} </td>
+                <td> {{cow.date_of_birth}} </td>
+                <td> {{cow.cow_price}} </td>
+                <td> {{cow.weight}} </td>
+                <td> {{cow.cow_breed}} </td>
+                <td></td>
+            </tr>
+
+            {% endfor %}
+
+
+        </table>
+        <a href="{{url_for('search_cows_info')}}">more..</a>
+    </div>
+</div>
+{%elif admin.role == 'health admin'%}
+<div class="card-body">
+    <div class="row">
+        <div id="vaccines" hidden>
+            <table class="table table-striped w-45 border">
+
+                <thead class="thead-inverse">
+                    <div class="text-center">
+                        <h3>vaccine inventory table</h3>
+                    </div>
+                    <tr>
+                        <th> vaccine name </th>
+                        <th> disease treated </th>
+                        <th> date in </th>
+                        <th> supplier name</th>
+                        <th> supplier contact </th>
+                    </tr>
+                </thead>
+                {% for item1 in info5.items %}
+                <tr>
+                    <td> {{item1.vaccine_name}} </td>
+                    <td>{{item1.disease_treated}}</td>
+                    <td>{{item1.date_in}}</td>
+                    <td>{{item1.supplier_name}}</td>
+                    <td>{{item1.supplier_contact}}</td>
+
+                </tr>
+
+                {% endfor %}
+
+
+
+            </table>
+            <a href="{{url_for('search_vaccine_inventory')}}">more...</a>
+        </div>
+        <div id="healths" hidden>
+            <table class="table table-striped w-45 border">
+                <thead class="thead-inverse">
+                    <div class="text-center">
+                        <h3>cow health information</h3>
+                    </div>
+                    <tr>
+                        <th> cow tag id </th>
+                        <th> vaccine name </th>
+                        <th> date vaccinated </th>
+                        <th> disease treated</th>
+                        <th> prescription(ml) </th>
+                    </tr>
+                </thead>
+                {% for item1 in info1.items %}
+                <tr>
+                    <td> {{item1.cow_tag_id}} </td>
+                    <td> {{item1.vaccine_name}} </td>
+                    <td> {{item1.date_of_vaccination}} </td>
+                    <td> {{item1.disease_treated}} </td>
+                    <td> {{item1.prescription}} </td>
+
+                </tr>
+                {% endfor %}
+
+
+            </table>
+            <a href="{{url_for('search_health_info')}}">more...</a>
+        </div>
+
+    </div>
+
+</div>
+{%elif admin.role == 'calving admin'%}
+<div class="card-body">
+    <div class="row">
+        <div id="inseminationss" hidden>
+            <table class="table table-striped w-45 border">
+
+                <thead class="thead-inverse">
+                    <div class="text-center">
+                        <h3>insemination records</h3>
+                    </div>
+                    <tr>
+                        <th> cow tag id </th>
+                        <th> insemination date </th>
+                        <th> breed </th>
+                        <th> sperm dose</th>
+                        <th> insemination age (years)</th>
+                    </tr>
+                </thead>
+                {% for item1 in info4.items %}
+                <tr>
+                    <td> {{item1.cow_tag_id}} </td>
+                    <td>{{item1.date_of_insemination}}</td>
+                    <td>{{item1.breed}}</td>
+                    <td>{{item1.sperm_dose}}</td>
+                    <td>{{item1.age_at_insemination}}</td>
+
+                </tr>
+                {%endfor%}
+
+            </table>
+            <a href="{{url_for('search_inseminations')}}">more..</a>
+        </div>
+        <div id="calvings">
+
+            <table class="table table-striped w-45 border">
+                <thead class="thead-inverse">
+                    <div class="text-center">
+                        <h3>calving information</h3>
+                    </div>
+                    <tr>
+                        <th> cow tag id </th>
+                        <th> sex </th>
+                        <th> breed </th>
+                        <th> weigth</th>
+                        <th> date of birth </th>
+                    </tr>
+                </thead>
+                {% for item1 in info3.items %}
+                <tr>
+                    <td> {{item1.cow_tag_id}} </td>
+                    <td> {{item1.gender}} </td>
+                    <td> {{item1.breed}} </td>
+                    <td> {{item1.weight}} </td>
+                    <td> {{item1.date_of_birth}} </td>
+
+                </tr>
+                {%endfor%}
+
+            </table>
+            <a href="{{url_for('search_calvings')}}">more..</a>
+        </div>
+        <div id="deaths" hidden>
+            <table class="table table-striped w-45 border">
+                <thead class="thead-inverse">
+                    <div class="text-center">
+                        <h3>death record info</h3>
+                    </div>
+                    <tr>
+                        <th> cow tag id </th>
+                        <th> date of death </th>
+                        <th> cause of death </th>
+
+                    </tr>
+                </thead>
+                {% for item1 in info2.items %}
+                <tr>
+                    <td> {{item1.cow_tag_id}} </td>
+                    <td> {{item1.date_of_death}} </td>
+                    <td> {{item1.cause_of_death}} </td>
+
+                </tr>
+                {%endfor%}
+
+            </table>
+            <a href="{{url_for('search_death_records')}}">more..</a>
+        </div>
+    </div>
+</div>
+{%elif admin.role == 'milk admin'%}
+<div class="card-body">
+    <div class="row">
+        <div id="milkcollections" hidden>
+            <table class="table table-striped w-45 border">
+
+                <thead class="thead-inverse">
+                    <div class="text-center">
+                        <h3>milk collection informaton</h3>
+                    </div>
+                    <tr>
+                        <th> cow tag id </th>
+                        <th> milk quantity (litres) </th>
+                        <th> milk quality </th>
+                        <th> milk collection time</th>
+                        <th> milk collection date </th>
+                    </tr>
+                </thead>
+                {% for item1 in info6.items %}
+                <tr>
+                    <td> {{item1.cow_tag_id}} </td>
+                    <td>{{item1.milk_quantity}}</td>
+                    <td>{{item1.milk_quality}}</td>
+                    <td>{{item1.milk_collection_time}}</td>
+                    <td>{{item1.milk_collection_date}}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </table>
+            <a href="{{url_for('search_milk_collection')}}">more...</a>
+        </div>
+        <div id="milksales" hidden>
+            <table class="table table-striped w-45 border">
+                <thead class="thead-inverse">
+                    <div class="text-center">
+                        <h3>milk sale information</h3>
+                    </div>
+                    <tr>
+                        <th> milk quantity </th>
+                        <th> milk price </th>
+                        <th> farmers phone </th>
+                        <th> milk_sale_date</th>
+                        <th> status </th>
+                    </tr>
+                </thead>
+                {% for item1 in info7.items %}
+                <tr>
+                    <td> {{item1.milk_quantity}} </td>
+                    <td> {{item1.milk_price}} </td>
+                    <td> {{item1.farmer_phone_number}} </td>
+                    <td> {{item1.milk_sale_date[:4]}}/{{item1.milk_sale_date[4:6]}}/{{item1.milk_sale_date[6:8]}} {{item1.milk_sale_date[8:10]}}:{{item1.milk_sale_date[10:12]}} </td>
+                    <td> {% if item1.admin_national_id != none %} <span class="text-success">sold</span> {%else%} not sold {% endif %} </td>
+
+                </tr>
+                {% endfor %}
+
+            </table>
+            <a href="{{url_for('search_milksale')}}">more..</a>
+
+        </div>
+        <div id="unservedmilksales" hidden>
+            <table class="table table-striped w-45 border">
+                <thead class="thead-inverse">
+                    <div class="text-center">
+                        <h3>milk sale information</h3>
+                    </div>
+                    <tr>
+                        <th> milk quantity </th>
+                        <th> milk price </th>
+                        <th> farmers phone </th>
+                        <th> milk_sale_date</th>
+                        <th> status </th>
+                    </tr>
+                </thead>
+                {% for item1 in info10.items %}
+                <tr>
+                    <td> {{item1.milk_quantity}} </td>
+                    <td> {{item1.milk_price}} </td>
+                    <td> {{item1.farmer_phone_number}} </td>
+                    <td> {{item1.milk_sale_date[:4]}}/{{item1.milk_sale_date[4:6]}}/{{item1.milk_sale_date[6:8]}} {{item1.milk_sale_date[8:10]}}:{{item1.milk_sale_date[10:12]}} </td>
+                    <td> {% if item1.admin_national_id %} <span class="text-success">sold</span> {%else%} not sold {% endif %} </td>
+
+                </tr>
+                {% endfor %}
+
+            </table>
+            <a href="{{url_for('search_milksales')}}">more..</a>
+        </div>
+
+    </div>
+
+</div>
+{%elif admin.role == 'feeds admin'%}
+<div class="card-body">
+    <div class="row">
+        <div id="food_inventorys" hidden>
+            <table class="table table-striped w-45 border">
+
+                <thead class="thead-inverse">
+                    <div class="text-center">
+                        <h3>food inventory informaton</h3>
+                    </div>
+                    <tr>
+                        <th> food name </th>
+                        <th> type of food </th>
+                        <th> food quantity available (kg)</th>
+                        <th> supplier contact </th>
+                        <th> date in </th>
+                    </tr>
+                </thead>
+                {% for item1 in info8.items %}
+                <tr>
+                    <td> {{item1.food_name}} </td>
+                    <td>{{item1.type_of_food}}</td>
+                    <td>{{item1.feed_quantity}}</td>
+                    <td>{{item1.supplier_contact}}</td>
+                    <td>{{item1.date_in}}</td>
+
+                </tr>
+
+                {% endfor %}
+
+
+            </table>
+            <a href="{{url_for('search_food_inventory')}}">more..</a>
+        </div>
+
+        <div id="feedinginfos" hidden>
+            <table class="table table-striped w-45 border">
+                <thead class="thead-inverse">
+                    <div class="text-center">
+                        <h3>cow feeding information</h3>
+                    </div>
+                    <tr>
+                        <th> cow tag id </th>
+                        <th> type of food fed </th>
+                        <th> quantity fed </th>
+                        <th> food name</th>
+                        <th> feeding personnel id</th>
+                        <th> date fed </th>
+                    </tr>
+                </thead>
+                {% for item1 in info9.items %}
+                <tr>
+                    <td> {{item1.cow_tag_id}} </td>
+                    <td> {{item1.type_of_food}} </td>
+                    <td> {{item1.quantity_given}} </td>
+                    <td> {{ item1.food_name}} </td>
+                    <td> {{item1.feeding_personel_id}} </td>
+                    <td> {{ item1.date_of_feeding}} </td>
+
+                </tr>
+                {% endfor %}
+
+
+            </table>
+            <a href="{{url_for('search_cowfeeds')}}">more..</a>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+{% endif %} {%else%}
+
+
+<table class="table table-striped border">
+    <thead class="thead-inverse">
+        <div class="text-center">
+            <h3>milk sale information</h3>
+        </div>
+        <tr>
+            <th> milk quantity in litres </th>
+            <th> milk price </th>
+            <th> your phone </th>
+            <th> milk_sale_date</th>
+            <th> status </th>
+        </tr>
+    </thead>
+    {% for item1 in records.items %}
+    <tr>
+        <td> {{item1.milk_quantity}} </td>
+        <td> {{item1.milk_price}} </td>
+        <td> {{item1.farmer_phone_number}} </td>
+        <td> {{item1.milk_sale_date[:4]}}/{{item1.milk_sale_date[4:6]}}/{{item1.milk_sale_date[6:8]}} {{item1.milk_sale_date[8:10]}}:{{item1.milk_sale_date[10:12]}} </td>
+        <td> {% if item1.admin_national_id %} <span class="text-success">served</span> {%else%} not served {% endif %} </td>
+
+    </tr>
+    {% endfor %} {% endif %}
+</table>

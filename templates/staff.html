@@ -1,8 +1,8 @@
- {% include 'headers/headers.html' %} {% include 'headers/headers.html' %}
+ {% include 'headers/headers.html' %} {% if 'admin' in session %} {% include 'headers/adminnav.html' %} {% endif %}
 
 <div class="text-center">
     <div style="opacity: 0.9;">
-        <h1>DAIRY MANAGEMENT SYSTEM</h1>
+        <h1>DAIRY FARM MANAGEMENT SYSTEM</h1>
     </div>
 </div>
 
@@ -17,30 +17,71 @@
                             <div class="card-title text-center">
                             </div>
                         </div>
-                        {% for message in get_flashed_messages() %} {{ message }} {% endfor %}
+                        <div class="text-center"> {% with messages = get_flashed_messages(with_categories=true) %} {% for category, message in messages %}
+                            <div class="{{ category }}">{{ message }}</div>
+                            {% endfor %} {%endwith%} </div>
+                        <div class="text-danger text-center"><span id="message"></span></div>
+                        <div class="text-danger text-center"><span id="message2"></span></div>
                         <div class="card-body">
                             <form action="{{url_for('staffs')}}" method="POST">
-                                <div class="form-group">
-                                    <label class="form-control-label">Staff ID</label>
-                                    <input type="text" name="staff_id" class="form-control" placeholder="staff id" required>
+                                <div class="row">
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label">First Name</label>
+                                        <input type="text" name="first_name" pattern="[A-Za-z\\s]*" class="form-control" placeholder="first name" required>
+                                    </div>
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label">Last Name</label>
+                                        <input type="text" name="last_name" pattern="[A-Za-z\\s]*" class="form-control" placeholder="last name" required>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-control-label">First Name</label>
-                                    <input type="text" name="first_name" class="form-control" placeholder="first name">
+                                <div class="row">
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label">Other Names</label>
+                                        <input type="text" name="other_names" pattern="[A-Za-z\\s]*" class="form-control" placeholder=" other names">
+                                    </div>
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label">National ID</label>
+                                        <input type="number" maxlength="8" min="1" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" minlength="7" name="national_id" onchange="myFunction()" id="nationalid" class="form-control" placeholder="national id"
+                                            required>
+                                        <span id="message1"></span>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-control-label">Last Name</label>
-                                    <input type="text" name="last_name" class="form-control" placeholder="last name">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-control-label">Other Names</label>
-                                    <input type="text" name="other_names" class="form-control" placeholder=" other names">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-control-label">National ID</label>
-                                    <input type="number" name="national_id" class="form-control" placeholder="national id">
-                                </div>
+                                <div class="row">
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label">Staff ID</label>
+                                        <input type="text" name="staff_id" id="staffid" maxlength="5" onchange="myFunction()" class="form-control" placeholder="staff id (eg ES001, es001)" required>
+                                    </div>
 
+
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label">Gender</label>
+                                        <select name="gender" class="form-select form-select-lg" id="" required>
+                                            <option value="" selected><span class="text-muted">select</span></option>
+                                            <option value="male">male</option>
+                                            <option value="female">female</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label">role</label>
+                                        <select name="role" class="form-select form-select-lg" id="" required>
+                                            {% if admin.role == 'milk admin' %}
+                                            <option value="milking personel" selected>milking person</option>
+                                            {%else%}
+                                            <option value="feeding personel" selected>feeding person</option>
+                                            {% endif %}
+                                            
+                                        </select>
+                                    </div>
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label">phone number</label><br>
+                                        <input type="tel" min="1" id="phone" maxlength="10" onchange="myFunction()" class="form-control w-100" name="phone_number" required>
+
+                                        <p style="color: red;" class="hide" id="result"></p>
+                                    </div>
+
+                                </div>
                                 <input type="submit" class="btn btn-primary btn-block" value="submit" />
                             </form>
                         </div>
@@ -49,11 +90,92 @@
             </div>
         </div>
     </div>
+    <script>
+        $('form').submit(function() {
+            $("#message2").html('');
+            $('input[required]').each(function(i, el) {
+                if ($(el).value === '') {
+                    $('#message2').html('Please fill all fields').css('color', 'red');
+                    return false
+                }
+
+            });
+        });
+    </script>
+    <script>
+        $('form').submit(function() {
+            // check if input is bigger than 3
+            $('#message1').html('');
+            var value = document.getElementById('nationalid').value;
+            var message = document.getElementById('message1');
+            if (value.length < 7 || value.length > 8) {
+                $('#message1').html('enter a valid national id').css('color', 'red');
+                return false; // keep form from submitting
+            }
+        });
+    </script>
+    <script>
+        var input = document.querySelector("#phone"),
+            errorMsg = document.querySelector("#result"),
+            validMsg = document.querySelector("#result");
+
+        // here, the index maps to the error code returned from getValidationError - see readme
+        var errorMap = ["Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
+
+        // initialise plugin
+        var iti = window.intlTelInput(input, {
+            utilsScript: "/public/static/js/utils.js",
+            initialCountry: "ke",
+        });
+
+        var reset = function() {
+            input.classList.remove("error");
+            errorMsg.innerHTML = "";
+            errorMsg.classList.add("hide");
+            validMsg.classList.add("hide");
+        };
+
+        // on blur: validate
+        input.addEventListener('blur', function() {
+            reset();
+            if (input.value.trim()) {
+                if (iti.isValidNumber()) {
+                    validMsg.classList.remove("hide");
+                } else {
+                    input.classList.add("error");
+                    var errorCode = iti.getValidationError();
+                    errorMsg.innerHTML = errorMap[errorCode];
+                    errorMsg.classList.remove("hide");
+
+
+                }
+            }
+        });
+
+        // on keyup / change flag: reset
+        input.addEventListener('change', reset);
+        input.addEventListener('keyup', reset);
+    </script>
+    <script>
+        $('form').submit(function() {
+            myFunction();
+            var input = document.querySelector("#phone");
+            if ($("#message").html() !== '' || errorMsg.innerHTML || $("#message2").html() !== '' || parseInt(input) < 1) return false;
+
+
+        });
+    </script>
+    <script>
+        var input = document.getElementById('staffid');
+        input.oninvalid = function(event) {
+            event.target.setCustomValidity('Staff id should be in the form ES001 or es001 ');
+        }
+    </script>
+    <script src="/public/one/staff.js"></script>
+
 
 
 
 
 
     {% include 'headers/footers.html' %}
-
-    </html>

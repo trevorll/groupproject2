@@ -11,34 +11,76 @@
                 <div class="col-md-6 offset-md-3 ">
                     <div class="card">
                         <div class="card-header">
-                            <h2 class="text-center">COW FEED RECORDS</h2>
+                            <h2 class="text-center">COW FEEDING RECORDS</h2>
                         </div>
                         <div class="card-body">
-                            {% for message in get_flashed_messages() %} {{message}} {% endfor %}
-                            <form action="" method="POST">
-                                <div class="form-group">
-                                    <label class="form-control-label">Type of food</label>
-                                    <input type="text" name="type_of_food" class="form-control" placeholder="type of food">
+                            <div class="text-center"> {% with messages = get_flashed_messages(with_categories=true) %} {% for category, message in messages %}
+                                <div class="{{ category }}">{{ message }}</div>
+                                {% endfor %} {%endwith%} </div>
+                            <form action="{{url_for('feed')}}" method="POST">
+                                <div class="row">
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label">Type of food</label>
+                                        <select name="type_of_food" class="form-select form-select-lg" id="">
+                                            <option value="">Name of feed</option>
+                                            {% for item in food %}
+                                                <option value="{{item.type_of_food}}">{{item.type_of_food}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label">Cow tag ID</label>
+                                        <input type="text" id="cow_tag_id" name="cow_tag_id" onchange="myFunction()" class="form-control" placeholder="cow tag ID">
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label">Food Name</label>
+                                        <select name="cow_feed_name" class="form-select form-select-lg" id="">
+                                            <option value="">Name of feed</option>
+                                            {% for item in food %}
+                                                <option value="{{item.food_name}}">{{item.food_name}}</option>
+                                            {% endfor %}
+                                        </select>
+
+                                    </div>
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label">Quantity Fed(in kg)</label>
+                                        <input type="number" min="1" name="quantity_fed" id="quantity_fed" class="form-control" placeholder="quantity" readonly>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label">Time of feeding</label>
+                                        <select name="time_fed" id="" class="form-control" required>
+                                            <option value="" selected>...</option>
+                                            <option value="morning">Morning</option>
+                                            <option value="evening">Evening</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label">Feeding personnel username</label>
+                                        <select name="feeding_personnel" class="form-control" id="" required>
+                                            <option value=""> ... </option>
+                                            {% for staff in staff  %}
+                                            {% if staff.role == "feeding personel" %}
+                                            <option value="{{staff.staff_id}}"> {{staff.first_name}} {{staff.last_name}}</option>
+                                            {% endif %}
+                                                
+                                            {% endfor %}
+                                        </select>
+
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-control-label">Cow tag ID</label>
-                                    <input type="text" name="cow_tag_id" class="form-control" placeholder="cow tag ID">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-control-label">Food Name</label>
-                                    <input type="text" name="cow_feed_name" class="form-control" placeholder="Name of feed">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-control-label">Quantity Fed(in kg)</label>
-                                    <input type="number" name="quantity_fed" class="form-control" placeholder="quantity">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-control-label">Time of feeding</label>
-                                    <input type="text" name="time_fed" class="form-control" placeholder="time of feeding">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-control-label">Feeding personnel</label>
-                                    <input type="text" name="feeding_personnel" class="form-control" placeholder="feeding personnel">
+                                    <label class="form-control-label">Date of feeding</label>
+                                    <div class='input-group date' id='datetimepicker2'>
+                                        <input name="date_of_feeding" type='text' id="date" class="form-control" readonly/>
+                                        <span class="input-group-addon">
+                                     <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
                                 </div>
                                 <input type="submit" class="btn btn-primary btn-block" value="save">
                             </form>
@@ -50,5 +92,54 @@
     </div>
 
 </body>
+<script src="/public/static/jquery2.min.js"></script>
+<script src="/public/static/moment.js"></script>
+<script src="/public/static/datetimepicker.min.js"></script>
+<link rel="stylesheet" href="/public/static/bootstrap-datetimepicker.css">
 
-</html>
+<script>
+    $(function() {
+        $('#date').datetimepicker({
+            format: 'yyyy/MM/DD hh:mm A',
+            defaultDate: new Date(),
+            maxDate: new Date(),
+            minDate: new Date() - 7 * 24 * 60 * 60 * 1000,
+            ignoreReadonly: true
+        });
+    })
+</script>
+
+<script>
+    function myFunction() {
+
+
+
+
+        const url = location.protocol + '//' + location.host + '/cow_s';
+        (fetch(url).then(response => response.json()).then(json => {
+            //console.log(JSON.parse(json))
+            one(JSON.parse(json))
+
+        }));
+
+    }
+
+    function one(data) {
+
+        var cowtag = document.querySelector("#cow_tag_id");
+        var quantityfed = document.querySelector("#quantity_fed");
+        quantityfed.value = null;
+
+
+        for (var i = 0; i < data.length; i++) {
+            if (cowtag.value.toUpperCase() == data[i].cow_tag_id) {
+                quantityfed.value = parseInt(data[i].weight) * 0.037;
+            }
+
+        }
+
+
+    }
+</script>
+
+{% include 'headers/footers.html' %}

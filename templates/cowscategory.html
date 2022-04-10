@@ -1,9 +1,14 @@
 {% include 'headers/headers.html' %} {% include 'headers/adminnav.html' %}
 
-<body class="container-fluid bg-dark" style="background-image: url('/public/static/images/istockphoto-1297005217-612x612.jpg'); background-size:cover;background-blend-mode:overlay; height:100vh">
-    <div style="opacity:0.9">
+<body class="container-fluid bg-dark" style="
+    background-image: url('/public/static/images/istockphoto-1297005217-612x612.jpg');
+    background-size: cover;
+    background-blend-mode: overlay;
+    height: 100vh;
+  ">
+    <div style="opacity: 0.9;">
         <div>
-            <h1 class="text-center">DAIRY FARM MANAGEMENT</h1>
+            <h1 class="text-center">DAIRY FARM MANAGEMENT SYSTEM</h1>
         </div>
         <div class="container-fluid mt-5">
             <div class="row">
@@ -14,35 +19,37 @@
                                 <h2>COWS BREED</h2>
                             </div>
                         </div>
-                        {% for message in get_flashed_messages() %} {{ message }} {% endfor %}
+                        <div class="text-center"> {% with messages = get_flashed_messages(with_categories=true) %} {% for category, message in messages %}
+                            <div class="{{ category }}">{{ message }}</div>
+                            {% endfor %} {%endwith%} </div>
                         <div class="card-body">
                             <form action="{{url_for('cowscat')}}" method="POST">
                                 <div class="form-group">
                                     <label for="breed">Breed</label>
-                                    <input type="text" class="form-control" id="breed" placeholder="breed">
-
+                                    <input type="text" class="form-control" name="breed" id="breed" placeholder="breed" />
                                 </div>
                                 <div class="form-group">
                                     <label for="description">Description</label>
-                                    <input type="text" class="form-control" id="description" placeholder="description">
+                                    <textarea class="form-control" name="description" id="description" placeholder="description" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="description">Gender</label>
+                                    <select name="sex" id="" class="form-select form-select-lg">
+                                        <option value="">...</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+
                                 </div>
 
-
-                                <div class="form-group">
+                                <div class="form-group" hidden>
                                     <label for="admin_national_id">Admin National Id</label>
-                                    <input type="number" class="form-control" id="admin_national_id" placeholder="admin_national_id">
+                                    <input type="number" class="form-control" value="{{admin.national_id}}" id="admin_national_id" placeholder="admin_national_id" />
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="breed_id">Breed Id</label>
-                                    <input type="number" class="form-control" id="breed_id" placeholder="breed_id">
-                                </div>
-
-                                <input class="btn btn-primary btn-block" value="submit" type="submit" \>
 
 
-
-
+                                <input class="btn btn-primary btn-block" value="submit" type="submit" />
                             </form>
                         </div>
                     </div>
@@ -50,4 +57,16 @@
             </div>
         </div>
     </div>
+    <script>
+        $('form').submit(function() {
+            var valid = true
+            $('input').each(function(i, el) {
+                if ((valid && $(el).val() === '') || errorMsg.innerHTML) valid = false
+                $('#message1').html('Please fill all field').css('color', 'red')
+            })
+
+            return valid
+        })
+    </script>
     {% include 'headers/footers.html' %}
+</body>

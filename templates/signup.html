@@ -1,8 +1,8 @@
-{% include 'headers/headers.html' %}
+{% include 'headers/headers.html' %} {% if 'superadmin' in session %}{% include 'headers/adminnav.html' %} {% else %} {% include 'headers/nav.html' %} {% endif %}
 
 <div class="text-center">
     <div style="opacity: 0.9;">
-        <h1>DAIRY MANAGEMENT SYSTEM</h1>
+        <h1>DAIRY FARM MANAGEMENT SYSTEM</h1>
     </div>
 </div>
 
@@ -16,40 +16,46 @@
                         <div class="card-header">
                             <div class="card-title text-center">
                             </div>
+
                         </div>
-                        {% for message in get_flashed_messages() %} {{ message }} {% endfor %}
+
+                        <span class="text-center" id='message'></span>
+                        <div class="text-center"> {% with messages = get_flashed_messages(with_categories=true) %} {% for category, message in messages %}
+                            <div class="{{ category }}">{{ message }}</div>
+                            {% endfor %} {%endwith%} </div>
                         <div class="card-body">
-                            <form class="p-3" {% if 'superadmin' in session %} action="{{url_for('adminsignup')}}" {%else%} action="{{url_for('verifyuser')}}" {% endif %} method="post">
+                            <form id="myForm" class="p-3" {% if 'superadmin' in session %} action="{{url_for('adminsignup')}}" {%else%} action="{{url_for('verifyuser')}}" {% endif %} method="post">
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label class="form-control-label" for="first_name">first name</label>
-                                        <input type="text" class="form-control" name="first_name" placeholder="first name" required>
+                                        <input type="text" class="form-control" pattern="[A-Za-z\\s]*" name="first_name" placeholder="first name" required>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="form-control-label">last name</label>
-                                        <input type="text" class="form-control" placeholder="last name" name="last_name" required>
+                                        <input type="text" pattern="[A-Za-z\\s]*" class="form-control" placeholder="last name" name="last_name" required>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label class="form-control-label">other names</label>
-                                        <input type="text" class="form-control" placeholder="other names" name="other_names">
+                                        <input type="text" pattern="[A-Za-z\\s]*" class="form-control" placeholder="other names" id="other_names" name="other_names">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="form-control-label ">email</label>
-                                        <input type="email" class="form-control" placeholder="email" name="email" required>
+                                        <input type="email" id="email" onchange="myFunction()" class="form-control" placeholder="email" name="email" required>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label class="form-control-label">phone number</label><br>
-                                        <input type="tel" id="phone" class="form-control w-100" name="phone_number" required>
+                                        <input type="tel" id="phone" onchange="myFunction()" maxlength="10" class="form-control w-100" name="phone_number" required>
 
                                         <p class="hide" id="result"></p>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="national_id">national_id</label>
-                                        <input type="number" class="form-control" {% if 'superadmin' in session %} name="admin_national_id" {%else%} name="farmer_national_id" {% endif %} placeholder="national id" required>
+                                        <input id="nationalid" min="1" type="number" maxlength="8" onchange="myFunction()" class="form-control" {% if 'superadmin' in session %} name="admin_national_id" {%else%} name="farmer_national_id" {% endif %} placeholder="national id" required>
+                                        <span id="message2"></span>
                                     </div>
                                 </div>
 
@@ -57,13 +63,13 @@
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label class="form-control-label ">staff id</label>
-                                        <input type="text" class="form-control" placeholder="staff id" name="staff_id" required>
+                                        <input type="text" id="staffid" onchange="myFunction()" maxlength="5" pattern="[Ee]{1}[Ss]{1}[0-9]*" class="form-control" placeholder="staff id eg ES123 or es123" name="staff_id" required>
                                     </div>
 
                                     <div class="form-group col-md-6">
                                         <label class="form-control-label ">role</label>
-                                        <select name="role" id="" class="form-control">
-                                            <option value=""selected>select role</option>
+                                        <select name="role" id="" class="form-control" required>
+                                            <option value="" selected>select role</option>
                                             <option value="feeds admin">feeds admin</option>
                                             <option value="cow info admin">cows information admin</option>
                                             <option value="health admin">health admin</option>
@@ -71,39 +77,28 @@
                                             <option value="milk admin">milk collection and sale </option>
 
                                         </select>
+                                        <span id="message1"></span>
                                     </div>
 
                                 </div>
-                                <div class="row">
-                                    <div class="form-group col-md-6">
-                                        <label class="form-control-label ">password</label>
-                                        <input type="password" class="form-control" placeholder="password" name="password" required>
-                                    </div>
 
-                                    <div class="form-group col-md-6">
-                                        <label class="form-control-label ">confirm_password</label>
-                                        <input type="password" class="form-control" placeholder="confirm password" name="confirm_password" required>
-                                    </div>
-
-                                </div>
 
                                 {% endif %}
                                 <div class="row">
                                     <div class="form-group col-md-6">
-                                        <label class="form-control-label">gender</label>
-                                        <select name="gender" class="form-control">                                    
-                                            <option class="form-control" selected>select</option>
-                                            <option class="form-control" value="male">male</option>
-                                            <option class="form-control" value="female">female</option>                              
-                                        
-                                        </select>
+                                        <h5 class="form-control-label">Please select gender</h5>
+                                        <input type="radio" class="form-check-input" name="gender" value="male" id="male" required>
+                                        <label for="male">Male</label>
+                                        <input type="radio" name="gender" class="form-check-input" Value="female" id="female" required>
+                                        <label for="female"></label>Female
+
                                     </div>
                                     <div class="form-group col-md-6 ">
                                         <label class="form-control-label ">username</label>
-                                        <input type="text" id="username" placeholder="username" name="username" class="form-control" required>
-                                        <span id='message'></span>
+                                        <input type="text" id="username" placeholder="username" onchange="myFunction()" name="username" class="form-control" required>
                                     </div>
                                 </div>
+
 
                                 <input type="submit" value="submit" class="btn btn-primary btn-block">
                             </form>
@@ -113,20 +108,8 @@
             </div>
         </div>
     </div>
-    <!-- <div class="row">
-        <div class='col-sm-6'>
-            <div class="form-group">
-                <div class='input-group date' id='datetimepicker2'>
-                    <input type='text' id="date" class="form-control" />
-                    <span class="input-group-addon">
-                 <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
-            </div>
-        </div>
-</body> -->
-    {% set j = admin %}
-    <meta id="admin" data-admin="{{ admin|safe }}">
+
+
 
     <script>
         var input = document.querySelector("#phone"),
@@ -160,6 +143,8 @@
                     var errorCode = iti.getValidationError();
                     errorMsg.innerHTML = errorMap[errorCode];
                     errorMsg.classList.remove("hide");
+
+
                 }
             }
         });
@@ -168,37 +153,83 @@
         input.addEventListener('change', reset);
         input.addEventListener('keyup', reset);
     </script>
-    {% if 'superadmin' in session %}
+
     <script>
-        var username = document.querySelector("#username");
-
-
-
-        $('#username').on('keyup', function() {
-            '{% for a in j %}'
-            if (username.value.toLowerCase() == '{{a.username}}'.toLowerCase()) {
-                $('#message').html('Pick another username').css('color', 'red');
-                $('#button').removeClass("d-none");
-
+        $('form').submit(function() {
+            $('#message2').html('');
+            var value = document.getElementById('nationalid').value;
+            var message = document.getElementById('message2');
+            if (value.length < 7 || value.length > 8) {
+                $('#message2').html('enter a valid national id').css('color', 'red');
+                return false; // keep form from submitting
             }
-
-            '{% endfor %}'
-
-
-        });
-        username.addEventListener('change', function() {
-            var reset = function() {
-                $('#username').classList.remove("message");
-                $('#message').innerHTML = "";
-                $('#message').classList.add("hide");
-                $('#message').classList.add("hide");
-            };
         });
     </script>
-    {% endif %}
+    <script>
+        $('form').submit(function() {
+            var valid = true;
+            myFunction();
+            $('input[required]').each(function(i, el) {
+
+                if (valid && $(el).value === '' || parseInt(input) < 1) valid = false;
+                $('#message1').html('Please fill all field correctly').css('color', 'red');
+
+            });
+
+            return valid;
+        });
+    </script>
+    <script>
+        $('form').submit(function() {
+            myFunction();
+            if ($("#message").html() !== '' || errorMsg.innerHTML) return false;
+            console.log($("#message").html())
+
+
+        });
+    </script>
+
+    <script>
+        $('form').submit(function() {
+
+            var valid = true;
+            $('select').each(function(i, el) {
+                $('#message1').html('');
+                if (valid && $(el).val() === '') {
+                    $('#message1').html('Please fill all field').css('color', 'red');
+                    valid = false;
+                }
+
+
+            });
+
+            return valid;
+        });
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            var requiredCheckboxes = $('.gender :checkbox[required]');
+            requiredCheckboxes.change(function() {
+                if (requiredCheckboxes.is(':checked')) {
+                    requiredCheckboxes.removeAttr('required');
+                } else {
+                    requiredCheckboxes.attr('required', 'required');
+                }
+            });
+        });
+    </script>
 
 
 
+    {% if 'superadmin' in session %}
+    <script src="/public/one/admins.js"></script>
+    {%else%}
+    <script src="/public/one/users.js"></script>
+    {%endif%}
+    <script src="/public/static/jquery3.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="/public/static/bootstrap3.min.js"></script>
 
 
-    </html>
+
+    </html>{% include 'headers/footers.html' %}

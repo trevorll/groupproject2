@@ -1,4 +1,4 @@
-{% include 'headers/headers.html' %}
+{% include 'headers/headers.html' %}{% include 'headers/adminnav.html' %}
 
 
 <head>
@@ -16,27 +16,45 @@
                             <h2 class="text-center">Cow Feed Records</h2>
                         </div>
                         <div class="card-body">
-                            {% for message in get_flashed_messages() %} {{message}} {% endfor %}
+                            <div class="text-center"> {% with messages = get_flashed_messages(with_categories=true) %} {% for category, message in messages %}
+                                <div class="{{ category }}">{{ message }}</div>
+                                {% endfor %} {%endwith%} </div>
                             <form action="" method="POST">
-                                <div class="form-group">
-                                    <label class="form-control-label">food name</label>
-                                    <input type="text" name="feed_name" class="form-control" placeholder="name of feed">
+                                <div class="row">
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label">food name</label>
+                                        <input type="text" pattern="[A-Za-z\\s]*" name="feed_name" class="form-control" placeholder="name of feed">
+                                    </div>
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label">Type of feed</label>
+                                        <input type="text" pattern="[A-Za-z\\s]*" name="type_of_feed" class="form-control" placeholder="type of feed">
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-control-label">Type of feed</label>
-                                    <input type="text" name="type_of_feed" class="form-control" placeholder="type_of_feed">
+                                <div class="row">
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label">feed quantity in kg</label>
+                                        <input type="number" min="1" name="feed_quantity" class="form-control" placeholder="Quantity of feed">
+                                    </div>
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label">Supplier Name</label>
+                                        <input type="text" pattern="[A-Za-z\\s]*" name="supplier_name" class="form-control" placeholder="Name of supplier">
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-control-label">feed quantity in kg</label>
-                                    <input type="number" name="feed_quantity" class="form-control" placeholder="Quantity of feed">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-control-label">Supplier Name</label>
-                                    <input type="text" name="supplier_name" class="form-control" placeholder="Name of supplier">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-control-label">Supplier Contact</label>
-                                    <input type="number" name="supplier_contact" class="form-control" placeholder="contact of supplier">
+                                <div class="row">
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label">Supplier Contact</label>
+                                        <input type="tel" pattern="[0-9]*" id="phone" class="form-control" minlength="10" maxlength="10" name="supplier_contact" required>
+                                        <p class="hide" id="result"></p>
+                                    </div>
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label">Date in</label>
+                                        <div class='input-group date' id='datetimepicker2'>
+                                            <input name="date_in" type='text' id="date" class="form-control" readonly/>
+                                            <span class="input-group-addon">
+                                         <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <input type="submit" class="btn btn-primary btn-block" value="save">
                             </form>
@@ -48,5 +66,63 @@
     </div>
 
 </body>
+<script src="/public/static/jquery2.min.js"></script>
+<script src="/public/static/moment.js"></script>
+<script src="/public/static/datetimepicker.min.js"></script>
+<link rel="stylesheet" href="/public/static/bootstrap-datetimepicker.css">
 
-</html>
+<script>
+    $(function() {
+        $('#date').datetimepicker({
+            format: 'yyyy/MM/DD hh:mm A',
+            defaultDate: new Date(),
+            maxDate: new Date(),
+            minDate: new Date() - (7 * 24 * 60 * 60 * 1000),
+            ignoreReadonly: true
+        });
+    })
+</script>
+<script>
+    var input = document.querySelector("#phone"),
+        errorMsg = document.querySelector("#result"),
+        validMsg = document.querySelector("#result");
+
+    // here, the index maps to the error code returned from getValidationError - see readme
+    var errorMap = ["Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
+
+    // initialise plugin
+    var iti = window.intlTelInput(input, {
+        utilsScript: "/public/static/js/utils.js",
+        initialCountry: "ke",
+    });
+
+    var reset = function() {
+        input.classList.remove("error");
+        errorMsg.innerHTML = "";
+        errorMsg.classList.add("hide");
+        validMsg.classList.add("hide");
+    };
+
+    // on blur: validate
+    input.addEventListener('blur', function() {
+        reset();
+        if (input.value.trim()) {
+            if (iti.isValidNumber()) {
+                validMsg.classList.remove("hide");
+            } else {
+                input.classList.add("error");
+                var errorCode = iti.getValidationError();
+                errorMsg.innerHTML = errorMap[errorCode];
+                errorMsg.classList.remove("hide");
+
+
+            }
+        }
+    });
+
+    // on keyup / change flag: reset
+    input.addEventListener('change', reset);
+    input.addEventListener('keyup', reset);
+</script>
+
+{% include 'headers/footers.html' %}

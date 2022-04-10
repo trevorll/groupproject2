@@ -1,0 +1,236 @@
+{% include 'headers/headers.html' %} {% if 'admin' in session %} {% include 'headers/adminnav.html' %}{% elif 'user' in session %} {% include 'headers/usernav.html' %} {% endif %}
+
+<body class="container">
+    <div class="text-center">
+        <h1>AVAILABLE COWS</h1>
+    </div>
+    <div>
+        <input type="radio" name="" id="check">filter by date of birth
+        <input type="radio" name="" id="check1">other filters
+    </div>
+
+    <section id="actions" class="py-4 mb-4 " hidden="true">
+        <div class="container">
+            <div class="row ">
+
+
+                <form action="{{url_for('search_cow')}}" method="POST">
+                    <div>
+                        <h5 class="text-center"> filter by date of birth</h5>
+                    </div>
+                    <div class="input-group">
+                        <div class="form-group col-md-6">
+                            <label class="form-control-label">start date</label>
+                            <div class='input-group date' id='datetimepicker2'>
+                                <input name="start" type='text' id="date" class="form-control" readonly/>
+                                <span class="input-group-addon">
+                             <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="form-control-label">End Date</label>
+                            <div class='input-group date' id='datetimepicker2'>
+                                <input name="end" type='text' id="date1" class="form-control" readonly/>
+                                <span class="input-group-addon">
+                                 <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <span class="input-group-btn">
+                            {# <input type="submit" value="search" class="btn btn-primary btn-block"> #}
+                            <button class="btn btn-primary btn-block"><i class="fa fa-search"></i> </button>
+                          </span>
+
+
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        </div>
+    </section>
+    <section id="actions1" class="py-4 mb-4 " hidden="true">
+        <div class="container">
+            <div class="row ">
+
+
+                <form action="{{url_for('search_other')}}" method="POST">
+                    <div class="input-group">
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="input-group">
+                                    <input class="form-control border-end-0 border" placeholder="search by cow breed, cow id,price " type="search" id="example-search-input">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-outline-secondary bg-primary  border ms-n5" type="button">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        </div>
+    </section>
+    <section id="view_cows" class="container-fluid">
+        <div onLoad="JavaScript:timeRefresh(60000);" class="container">
+            <div class="row">
+                {% for cow in cows %}
+                <div class="card col-md-3 text-center">
+                    <div class="card-body">
+
+                        {% if 'user' in session %}
+                        <h5 class="card-title">{{cow.cow_tag_id}}</h5>
+                        <div class="row">
+                            <img style="height: 200px;" src="/public/img/{{cow.cow_image}}" alt=""> {%if 'admin' in session and user.role=='cow info admin' %} {%endif %}
+                        </div>
+                        <p class="text-muted">
+                            <small class="text-muted">breed : {{cow.cow_breed}}</small>
+                        </p>
+                        <p class="text-muted">
+                            <small class="text-muted">
+                                status : {% if cow.cow_status==True %} Available
+                                {%else%}
+                                Not Available
+                                {% endif %}
+                            </small>
+                        </p>
+                        <p class="text-muted">
+                            <small class="text-muted">
+                                price is ksh:
+                                <b>{{cow.cow_price}}</b>
+                            </small>
+                        </p>
+                        <form action="{{url_for('viewcow')}}" method="POST">
+                            <div class="form-group" hidden>
+                                <label class="form-control-label">cow_tag_id</label>
+                                <input type="text" name="cow_tag_id" value="{{cow.cow_tag_id}}" class="form-control" readonly>
+                            </div>
+                            <input type="submit" value="view cow" class="btn
+                                btn-primary btn-block">
+                        </form>
+                        {% elif 'admin' in session and user.role=='cow info admin' %}
+                        <h5 class="card-title">{{cow.cow_tag_id}}</h5>
+                        <div class="row">
+                            <img style="height: 200px;" src="/public/img/{{cow.cow_image}}" alt=""> {%if 'admin' in session and user.role=='cow info admin' %} {%endif %}
+                        </div>
+                        <p class="text-muted">
+                            <small class="text-muted">breed : {{cow.cow_breed}}</small>
+                        </p>
+                        <p class="text-muted">
+                            <small class="text-muted">
+                                status : {% if cow.cow_status==True %} Available
+                                {%else%}
+                                Not Available
+                                {% endif %}
+                            </small>
+                        </p>
+                        <p class="text-muted">
+                            <small class="text-muted">
+                                price is ksh:
+                                <b>{{cow.cow_price}}</b>
+                            </small>
+                        </p>
+                        <form action="{{url_for('viewcow')}}" method="POST">
+                            <div class="form-group" hidden>
+                                <label class="form-control-label">cow_tag_id</label>
+                                <input type="text" name="cow_tag_id" value="{{cow.cow_tag_id}}" class="form-control" readonly>
+                            </div>
+                            <input type="submit" value="view cow" class="btn
+                                btn-primary btn-block">
+                        </form>
+                        {%else%}
+                        <h5 class="card-title">{{cow.cow_tag_id}}</h5>
+                        <div class="row">
+                            <img style="height: 200px;" src="/public/img/{{cow.cow_image}}" alt=""> {%if 'admin' in session and user.role=='cow info admin' %} {%endif %}
+                        </div>
+                        <p class="text-muted">
+                            <small class="text-muted">breed : {{cow.cow_breed}}</small>
+                        </p>
+                        <p class="text-muted">
+                            <small class="text-muted">
+                                status : {% if cow.cow_status==True %} Available
+                                {%else%}
+                                Not Available
+                                {% endif %}
+                            </small>
+                        </p>
+                        <p class="text-muted">
+                            <small class="text-muted">
+                                price is ksh:
+                                <b>{{cow.cow_price}}</b>
+                            </small>
+                        </p>
+                        <form action="{{url_for('viewcow')}}" method="POST">
+                            <div class="form-group" hidden>
+                                <label class="form-control-label">cow_tag_id</label>
+                                <input type="text" name="cow_tag_id" value="{{cow.cow_tag_id}}" class="form-control" readonly />
+                            </div>
+
+                            <input type="submit" value="view cow" class="btn
+                                btn-primary btn-block">
+                        </form>
+                        {%endif%}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    <!-- jQuery library -->
+    <script src="/public/static/jquery3.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="/public/static/bootstrap3.min.js"></script>
+    <script src="/public/static/moment.js"></script>
+    <script src="/public/static/datetimepicker.min.js"></script>
+    <link rel="stylesheet" href="/public/static/bootstrap-datetimepicker.css">
+    <script>
+        $(function() {
+            $('#date').datetimepicker({
+                defaultDate: new Date() - 1000 * 60 * 60 * 24 * 30,
+                maxDate: new Date(),
+                ignoreReadonly: true
+            });
+        })
+    </script>
+    <script>
+        $(function() {
+            $('#date1').datetimepicker({
+                format: 'yyyy/MM/DD hh:mm A',
+                defaultDate: new Date(),
+                maxDate: new Date(),
+                ignoreReadonly: true
+            });
+        })
+    </script>
+    <script>
+        $('#check').change(function() {
+            if ($("#actions").attr("hidden", true)) {
+                $("#actions").attr("hidden", false);
+                $("#actions1").attr("hidden", true);
+                $("#check1").prop("checked", false)
+            } else {
+                $("#actions").attr("hidden", true)
+            }
+        })
+    </script>
+    <script>
+        $('#check1').change(function() {
+            if ($("#actions1").attr("hidden", true)) {
+                $("#actions1").attr("hidden", false);
+                $("#actions").attr("hidden", true);
+                $("#check").prop("checked", false)
+            } else {
+                $("#actions1").attr("hidden", true)
+            }
+        })
+    </script>
+
+    {% include 'headers/footers.html' %}
+</body>

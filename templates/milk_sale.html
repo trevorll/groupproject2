@@ -1,8 +1,8 @@
-{% include 'headers/headers.html' %} {% include 'headers/headers.html' %}
+{% include 'headers/headers.html' %} {% include 'headers/headers.html' %} {% if 'admin' in session %} {% include 'headers/adminnav.html' %} {% endif %}
 
 <div class="text-center">
     <div style="opacity: 0.9;">
-        <h1>DAIRY MANAGEMENT SYSTEM</h1>
+        <h1>DAIRY FARM MANAGEMENT SYSTEM</h1>
     </div>
 </div>
 
@@ -17,24 +17,47 @@
                             <div class="card-title text-center">
                             </div>
                         </div>
-                        {% for message in get_flashed_messages() %} {{ message }} {% endfor %}
+                        <div class="text-center"> {% with messages = get_flashed_messages(with_categories=true) %} {% for category, message in messages %}
+                            <div class="{{ category }}">{{ message }}</div>
+                            {% endfor %} {%endwith%} </div>
                         <div class="card-body">
                             <form action="{{url_for('milk_sales')}}" method="POST">
+                                <div hidden class="form-group">
+                                    <label for="transaction_code">Purpose</label>
+                                    <input type="text" value="milksale" class="form-control" name="purpose">
+                                </div>
                                 <div class="form-group">
                                     <label for="transaction_code">Enter transaction code:</label>
-                                    <input type="text" class="form-control" name="transaction_code" placeholder="transaction_code">
+                                    <input type="text" class="form-control" name="transaction_code" placeholder="transaction_code" required>
+
+                                </div>
+                                <input type="submit" value="submit" class="btn btn-primary btn-block ">
+
                             </form>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+</body>
 
 
 
 
 
-        {% include 'headers/footers.html' %}
+{% include 'headers/footers.html' %}
+<script>
+    $('form').submit(function() {
+        var valid = true;
+        $('input').each(function(i, el) {
+            if (valid && $(el).value === '') valid = false;
+            $('#message1').html('Please fill all field').css('color', 'red');
 
-        </html>
+        });
+
+        return valid;
+    });
+</script>
+
+</html>

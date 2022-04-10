@@ -1,0 +1,150 @@
+{% include 'headers/headers.html' %} {% if 'admin' in session %} {% include 'headers/adminnav.html' %}{% elif 'user' in session %} {% include 'headers/usernav.html' %} {% elif 'superadmin' in session %} {% include 'headers/adminnav.html' %} {% else %}
+{% include 'headers/nav.html' %} {% endif %}
+
+<section id="view_cows" class="container-fluid">
+    <div onLoad="JavaScript:timeRefresh(60000);" class="container">
+
+        <div class="row">
+
+
+            <div class="card col-md-6 offset-md-3 text-center">
+                <div class="card-body">
+                    <h5 class="card-title"> {{cow.cow_tag_id}} </h5>
+                    <div class="row">
+                        <img style="max-height: 400px;" src="/public/img/{{cow.cow_image}}" alt=""> {%if 'admin' in session and user.role=='cow info admin' %}
+                        <a href="" class="text-muted ml-5" data-toggle="modal" data-target="#changephoto"><i class="fa fa-camera"></i>Change Photo</a> {% endif %}
+                    </div>
+                    <p class="text-muted">
+                        <small class="text-muted">breed : {{cow.cow_breed}}</small>
+                    </p>
+                    <p class="text-muted">
+                        <small class="text-muted">status : {% if cow.cow_status==True %}
+                            Available
+                            {%else%}
+                            not available
+                        {% endif %} </small>
+                    </p>
+                    <p class="text-muted">
+                        <small class="text-muted">Milked : {{cow.milk}}</small>
+                    </p>
+                    <p class="text-muted">
+                        <small class="text-muted">Expectant : {{cow.pregnant}}</small>
+                    </p>
+                    <p class="text-muted">
+                        <small class="text-muted">DOB : {{cow.date_of_birth}}</small>
+                    </p>
+                    <p class="text-muted">
+                        <small class="text-muted">price is ksh: <b>{{cow.cow_price}}</b></small>
+                    </p>
+                    {% if 'user' in session %} {% if ((cow.cow_price | int) > 0 )%}
+                    <form action="{{url_for('get_post_cart')}}" method="post">
+
+                        <input type="text" name="cow_tag_id" id="cow_tag_id" readonly value="{{cow.cow_tag_id}}" hidden>
+                        <input type="text" id="url" name="get" hidden>
+                        <input type="number" name="amount" readonly class="btn btn-primary btn-block" value="{{cow.cow_price}}">
+                        <input type="submit" id="btns" value="Add To Cart" class="btn btn-primary btn-block"> {% for item in cart %} {% if item.cow_tag_id == cow.cow_tag_id %}
+                        <script>
+                            var btns = document.querySelector("#btns");
+                            var btn2 = document.querySelector("#url");
+                            btns.value = 'Go to cart';
+                            btn2.value = "get";
+                        </script> {% endif %} {% endfor %}
+                    </form>
+                    {% endif %} {%elif 'admin' in session and user.role=='cow info admin' %} {% if cow.cow_status == true %}
+                    <a href="#" data-target="#updatecowinfo" data-toggle="modal" class="btn btn-primary btn-block">update price</a> {% endif %} {%elif not('admin' in session) and not('user' in session) %} {% if ((cow.cow_price | int) > 0 )%}
+                    <a href="{{url_for('login')}}" class="btn btn-primary btn-block">Buy</a> {% endif %}{% endif %}
+
+
+
+                </div>
+            </div>
+
+
+
+            <div class="modal fade" id="changephoto">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header text-white bg-primary">
+                            <h2 class="modal-title" id="changephotolabel">Change cow image</h2>
+                            <button class="close" data-dismiss="modal"><span>&times;</span></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form action="{{url_for('changephoto')}}" method="POST" enctype="multipart/form-data">
+                                <div class="form-group" hidden>
+                                    <label class="form-control-label">cow_tag_id</label>
+                                    <input type="text" name="cow_tag_id" value="{{cow.cow_tag_id}}" class="form-control" readonly>
+                                </div>
+                                <div class="form-group" id>
+                                    <label class="upload_image">upload image</label>
+                                    <input type="file" name="image" value="" class="form-control">
+                                </div>
+                                <input type="submit" value="Change" class="btn btn-primary btn-block" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="modal fade" id="updatecowinfo">
+
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header text-white bg-primary">
+                            <h2 class="modal-title" id="updatecowinfolabel">Update Info</h2>
+                            <button class="close" data-dismiss="modal"><span>&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+
+                            <form action="{{url_for('updateprice')}}" method="POST">
+                                <div class="form-group" hidden>
+                                    <label class="form-control-label">cow_tag_id</label>
+                                    <input type="text" name="cow_tag_id" value="{{cow.cow_tag_id}}" class="form-control" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">price (ksh)</label>
+                                    <input type="number" name="price" class="form-control" value="{{cow.cow_price}}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-control-label">is milked</label>
+                                    <select name="is_milked" class="form-select form-select-lg" id="">
+                                        <option value="{{cow.milk}}">{{cow.milk}}</option>
+                                        <option value="True">True</option>
+                                        <option value="False">False</option>
+                                    </select>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">is expectant</label>
+                                    <select name="is_expectant" class="form-select form-select-lg" id="">
+                                        <option value="cow.pregnant">{{cow.pregnant}}</option>
+                                        <option value="True">True</option>
+                                        <option value="False">False</option>
+                                    </select>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">weight(Kg)</label>
+                                    <input type="number" name="weight" class="form-control" value="{{cow.weight}}">
+                                </div>
+                                <input type="submit" value="Update" class="btn btn-primary btn-block" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</section>
+<!-- jQuery library -->
+<script src="/public/static/jquery3.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="/public/static/bootstrap3.min.js"></script>
+
+{% include 'headers/footers.html' %}

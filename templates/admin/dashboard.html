@@ -1,10 +1,11 @@
-{%include 'headers/headers.html'%} {% include '/headers/adminnav.html'%}
+{%include 'headers/headers.html'%}
 
-<body>
+<body class="container">
+    {% include '/headers/adminnav.html'%}
     <section id="action" class="py-4 mb-4">
         <div class="container">
-            <div class="row mt-3">
-                <div class="col-md-2" mr-auto>
+            <div class="row mt-3 justify-content-center">
+                <div class="col">
                     {% if admin.role=="cow info admin" %}
                     <a href="#" data-target="#cowrecordmodal" data-toggle="modal" class="btn btn-info btn-block">
                         <i class="fa fa-plus"></i>enter cow records
@@ -30,9 +31,9 @@
 
                 </div>
 
-                <div class="col-md-2">
+                <div class="col">
                     {% if admin.role=="cow info admin" %}
-                    <a href="#" data-target="#cowreportdmodal" data-toggle="modal" class="btn btn-info btn-block">
+                    <a href="#" data-target="#cowreporthmodal" data-toggle="modal" class="btn btn-info btn-block">
                         <i class="fa fa-print"></i>generate report
                     </a>
                     {% elif admin.role=="health admin" or admin.role=="vaccine inventory admin" %}
@@ -55,252 +56,682 @@
                     {% endif %}
 
                 </div>
-                <div class="col-md-2">
+                {% if admin.role == "feeds admin" or admin.role == "milk admin" %}
+                <div class="col">
                     <a href="{{url_for('staffs')}}" class="btn btn-warning btn-block">
-                        <i class="fa fa-pen"></i>add staff
+                        <i class="fa fa-user-plus"></i>add staff
                     </a>
                 </div>
-                <div class="col-md-2">
+                {% endif %}
+                <div class="col">
                     <a href="#" data-target="#changepasswordmodal" data-toggle="modal" class="btn btn-danger btn-block">
                         <i class="fa fa-pen"></i>change password
-                    </a>
-                </div>
-                <div class="col-md-2">
-                    <a href="{{url_for('logout')}}" class="btn btn-warning btn-block">
-                        <i class="fa fa-pen"></i>logout
                     </a>
                 </div>
 
             </div>
         </div>
     </section>
-    <div class="row mt-5">
-        <div class=" ml-auto">
-            <div class="card text-center text-white bg-success p-3 mb-3 justify-content-center " style="height: 25vh;">
-                <h3>users</h3>
-                <h1 class="display-4">
-                    <a href="{{url_for('farmer')}}" class="btn btn-outline-light">view</a></h1>
-            </div>
-        </div>
-        <div class=" ml-auto">
-            <div class="card text-center text-white bg-primary p-3 mb-3 justify-content-center " style="height: 25vh;">
-                <h3>cows</h3>
-                <h1 class="display-4">
-                    <a href="{{url_for('view')}}" class="btn btn-outline-light">view</a></h1>
-            </div>
-        </div>
-    </div>
-    {% for message in get_flashed_messages() %} <span class="text-white text-center">{{message}}</span> {% endfor %}
 
-</body>
-<div class="modal fade" id="updatedetailsmodal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header text-white bg-primary">
-                <h3 class="modal-title" id="updatedetailslabel">update details</h3>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <div class="dropdown col-md-2 offset-md-5">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-expanded="false">
+          Records
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            {% if admin.role == 'feeds admin' %}
+            <li><a class="dropdown-item" onclick="feed_inventorys()" href="#">food inventory</a></li>
+            <li><a class="dropdown-item" onclick="feedinginfos()" href="#">cow feeding information</a></li>
+            {%elif admin.role == 'milk admin'%}
+            <li><a class="dropdown-item" onclick="milkcollections()" href="#">milk collection</a></li>
+            <li><a class="dropdown-item" onclick="milksales()" href="#">milk sale</a></li>
+            <li><a class="dropdown-item" onclick="unservedmilksales()" href="#">unserved milk sale</a></li>
+            {%elif admin.role == 'calving admin'%}
+            <li><a class="dropdown-item" onclick="inseminationss()" href="#">insemination records</a></li>
+            <li><a class="dropdown-item" onclick="calvings()" href="#">calving records</a></li>
+            <li><a class="dropdown-item" onclick="deaths()" href="#">Death records</a></li>
+            {%elif admin.role == 'health admin'%}
+            <li><a class="dropdown-item" onclick="vaccines()" href="#">vaccine records</a></li>
+            <li><a class="dropdown-item" onclick="healths()" href="#">health records</a></li>
+            {%elif admin.role == 'cow info admin'%}
+            <li><a class="dropdown-item" onclick="cowinfos()" href="#">cow information records</a></li>
+            {% endif %}
+            <li><a class="dropdown-item" onclick="hide()" href="#">hide records</a></li>
+        </ul>
+    </div><br>
+    <section class="mt-5">
+        <div class="row ">
+            <div class="text-center"> {% with messages = get_flashed_messages(with_categories=true) %} {% for category, message in messages %}
+                <div class="{{ category }}">{{ message }}</div>
+                {% endfor %} {%endwith%}
             </div>
-            <div class="modal-body">
-                <form action="" method="post">
-                    <div class="form-group">
-                        <label class="form-control-label" for="vaccine_name">vaccine name</label>
-                        <input type="text" class="form-control" name="vaccine_name" placeholder="vaccine name">
+            <section class="container">
+                <div class="row ">
+                    <div id="border" class="col-md-9 ">
+                        <div class="card" id="recents" hidden>
+                            <div class="card-header">
+                                <h2 class="text-center"> RECENT ACTIVITIES</h2>
+
+                            </div>
+                            {% include 'tables.html' %}
+                        </div>
                     </div>
-                    <button class="btn btn-primary" type="submit">submit</button>
-                </form>
 
+
+
+                    <section class="col-md-3  border">
+                        <div class="p-2 flex justify-content-center">
+                            <div class="card text-center text-white bg-success p-3 mb-3 justify-content-center test">
+                                <h3>users</h3>
+                                <h1 class="display-4">
+                                    <a href="{{url_for('farmer')}}" class="btn btn-outline-light">view</a></h1>
+                            </div>
+
+                            <div class="card text-center text-white bg-primary p-3 mb-3 justify-content-center test">
+                                <h3>cows</h3>
+                                <h1 class="display-4">
+                                    <a href="{{url_for('view')}}" class="btn btn-outline-light">view</a></h1>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </section>
+
+        </div>
+    </section>
+
+
+
+
+    <div class="modal fade" id="updatedetailsmodal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary">
+                    <h3 class="modal-title" id="updatedetailslabel">update details</h3>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="post">
+                        <div class="form-group">
+                            <label class="form-control-label" for="vaccine_name">vaccine name</label>
+                            <input type="text" class="form-control" name="vaccine_name" placeholder="vaccine name">
+                        </div>
+                        <button class="btn btn-primary" type="submit">submit</button>
+                    </form>
+
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="modal fade" id="enterrecordmodal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header text-white bg-primary">
-                <h3 class="modal-title" id="updatedetailslabel">enter new record</h3>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <a href="{{url_for('health')}}" class="btn btn-primary btn-block">health details</a>
-                <a href="{{url_for('vaccineinventory')}}" class="btn btn-primary btn-block">vaccine inventory</a>
+    <div class="modal fade" id="enterrecordmodal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary">
+                    <h3 class="modal-title" id="updatedetailslabel">enter new record</h3>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <a href="{{url_for('health')}}" class="btn btn-primary btn-block">health details</a>
+                    <a href="{{url_for('vaccineinventory')}}" class="btn btn-primary btn-block">vaccine inventory</a>
 
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="modal fade" id="calvingmodal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header text-white bg-primary">
-                <h3 class="modal-title" id="calvingmodal">enter new record</h3>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <a href="{{url_for('calving')}}" class="btn btn-primary btn-block">calving details</a>
-                <a href="{{url_for('deathrecord')}}" class="btn btn-primary btn-block">death records</a>
-                <a href="{{url_for('inseminationrecord')}}" class="btn btn-primary btn-block">insemination record</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="milkrecordmodal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header text-white bg-primary">
-                <h3 class="modal-title" id="milkrecordmodal">enter new record</h3>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <a href="{{url_for('milk_sales')}}" class="btn btn-primary btn-block">milk sale</a>
-                <a href="{{url_for('milk_collections')}}" class="btn btn-primary btn-block">milk collection</a>
-
+    <div class="modal fade" id="calvingmodal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary">
+                    <h3 class="modal-title" id="calvingmodal">enter new record</h3>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <a href="{{url_for('calving')}}" class="btn btn-primary btn-block">calving details</a>
+                    <a href="{{url_for('deathrecord')}}" class="btn btn-primary btn-block">death records</a>
+                    <a href="{{url_for('inseminationrecord')}}" class="btn btn-primary btn-block">insemination record</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="modal fade" id="cowrecordmodal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header text-white bg-primary">
-                <h3 class="modal-title" id="cowrecordmodal">enter new record</h3>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <a href="{{url_for('cowinfo')}}" class="btn btn-primary btn-block">enter cow info</a>
-                <a href="{{url_for('cowscat')}}" class="btn btn-primary btn-block">cows category</a>
 
+    <div class="modal fade" id="milkrecordmodal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary">
+                    <h3 class="modal-title" id="milkrecordmodal">enter new record</h3>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <a href="{{url_for('milk_sales')}}" class="btn btn-primary btn-block">milk sale</a>
+                    <a href="{{url_for('milk_collections')}}" class="btn btn-primary btn-block">milk collection</a>
+                    <a href="#" data-target="#spoiltmodal" data-dismiss="modal" data-toggle="modal" class="btn btn-primary btn-block">spoilt milk</a>
+
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="modal fade" id="feedrecordmodal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header text-white bg-primary">
-                <h3 class="modal-title" id="feedrecordmodal">enter new record</h3>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <a href="{{url_for('cowfeedinventori')}}" class="btn btn-primary btn-block">cow feed inventory</a>
-                <a href="{{url_for('feed')}}" class="btn btn-primary btn-block">cow feeding record</a>
+    <div class="modal fade" id="cowrecordmodal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary">
+                    <h3 class="modal-title" id="cowrecordmodal">enter new record</h3>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <a href="{{url_for('cowinfo')}}" class="btn btn-primary btn-block">enter cow info</a>
+                    <a href="{{url_for('cowscat')}}" class="btn btn-primary btn-block">cows category</a>
 
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <div class="modal fade" id="feedrecordmodal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary">
+                    <h3 class="modal-title" id="feedrecordmodal">enter new record</h3>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <a href="{{url_for('cowfeedinventori')}}" class="btn btn-primary btn-block">cow feed inventory</a>
+                    <a href="{{url_for('feed')}}" class="btn btn-primary btn-block">cow feeding record</a>
 
-<div class="modal fade" id="cowfeedreportmodal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header text-white bg-primary">
-                <h3 class="modal-title" id="cowinforeportmodal">Print Reports</h3>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <a href="{{url_for('cowsfeedinventory_report')}}" class="btn btn-primary btn-block">cow feed inventory</a>
-                <a href="{{url_for('cowsfeeding_report')}}" class="btn btn-primary btn-block">cow feeding record</a>
-
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="modal fade" id="milkreportmodal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header text-white bg-primary">
-                <h3 class="modal-title" id="milkreportmodal">Print Reports</h3>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <a href="{{url_for('milksale_report')}}" class="btn btn-primary btn-block">milk sale</a>
-                <a href="{{url_for('milkcollection_report')}}" class="btn btn-primary btn-block">milk collection</a>
 
+    <div class="modal fade" id="cowfeedreportmodal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary">
+                    <h3 class="modal-title" id="cowinforeportmodal">Print Reports</h3>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div><input type="radio" name="" id="cowsfeeding">cow feeding report</div>
+                    <div><input type="radio" name="" id="cowsfeedinventory">cow feed inventory report </div>
+                    <form action="{{url_for('cowsfeeding_report')}}" method="post" id="cowsfeedingform" hidden>
+                        <div class="text-center"><input type="radio" name="" id="btn8">filter by date </div>
+                        <div>
+                        </div>
+                        <div class="input-group" id="cowsfeedingfilter" hidden>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">start date</label>
+                                <div class='input-group date'>
+                                    <input name="start" type='text' id="date14" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                             <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">End Date</label>
+                                <div class='input-group date'>
+                                    <input name="end" type='text' id="date15" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                                 <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                        <input type="submit" name="" value="generate" class="btn btn-primary btn-block">
+
+                    </form>
+                    <form action="{{url_for('cowsfeedinventory_report')}}" method="post" id="cowsfeedinventoryform" hidden>
+                        <div class="text-center"><input type="radio" name="" id="btn9">filter by date </div>
+                        <div>
+                        </div>
+                        <div class="input-group" id="cowsfeedinventoryfilter" hidden>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">start date</label>
+                                <div class='input-group date'>
+                                    <input name="start" type='text' id="date16" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                             <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">End Date</label>
+                                <div class='input-group date'>
+                                    <input name="end" type='text' id="date17" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                                 <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                        <input type="submit" name="" value="generate" class="btn btn-primary btn-block">
+
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="modal fade" id="enterreportmodal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header text-white bg-primary">
-                <h3 class="modal-title" id="enterreportmodal">Print Reports</h3>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <a href="{{url_for('healthinfo_report')}}" class="btn btn-primary btn-block">health details</a>
-                <a href="{{url_for('vaccineinventory_report')}}" class="btn btn-primary btn-block">vaccine inventory</a>
+    <div class="modal fade" id="milkreportmodal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary">
+                    <h3 class="modal-title" id="milkreportmodal">Print Reports</h3>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div><input type="radio" name="" id="milksale">milksale report</div>
+                    <div><input type="radio" name="" id="unservedmilksale">unserved milksale report</div>
+                    <div><input type="radio" name="" id="milkcollection">milkcollection report </div>
+                    <form action="{{url_for('milksale_report')}}" method="post" id="milksaleform" hidden>
+                        <div class="text-center"><input type="radio" name="" id="btn6">filter by date </div>
+                        <div>
+                        </div>
+                        <div class="input-group" id="milksalefilter" hidden>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">start date</label>
+                                <div class='input-group date'>
+                                    <input name="start" type='text' id="date10" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                             <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">End Date</label>
+                                <div class='input-group date'>
+                                    <input name="end" type='text' id="date11" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                                 <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
 
+
+
+
+                        </div>
+                        <input type="submit" name="" value="generate" class="btn btn-primary btn-block">
+
+                    </form>
+                    <form action="{{url_for('milksale_reports')}}" method="post" id="unservedmilksaleform" hidden>
+                        <div class="text-center"><input type="radio" name="" id="btn32">filter by date </div>
+                        <div>
+                        </div>
+                        <div class="input-group" id="unservedmilksalefilter" hidden>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">start date</label>
+                                <div class='input-group date'>
+                                    <input name="start" type='text' id="date30" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                             <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">End Date</label>
+                                <div class='input-group date'>
+                                    <input name="end" type='text' id="date31" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                                 <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                        <input type="submit" name="" value="generate" class="btn btn-primary btn-block">
+
+                    </form>
+                    <form action="{{url_for('milkcollection_report')}}" method="post" id="milkcollectionform" hidden>
+                        <div class="text-center"><input type="radio" name="" id="btn7">filter by date </div>
+                        <div>
+                        </div>
+                        <div class="input-group" id="milkcollectionfilter" hidden>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">start date</label>
+                                <div class='input-group date'>
+                                    <input name="start" type='text' id="date12" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                             <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">End Date</label>
+                                <div class='input-group date'>
+                                    <input name="end" type='text' id="date13" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                                 <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                        <input type="submit" name="" value="generate" class="btn btn-primary btn-block">
+
+                    </form>
+
+
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="modal fade" id="cowreportdmodal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header text-white bg-primary">
-                <h3 class="modal-title" id="cowreportmodal">Print report</h3>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <a href="{{url_for('cowinfo_report')}}" class="btn btn-primary btn-block">enter cow info</a>
+    <div class="modal fade" id="enterreportmodal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary">
+                    <h3 class="modal-title" id="enterreportmodal">Print Reports</h3>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div><input type="radio" name="" id="health">cow health report</div>
+                    <div><input type="radio" name="" id="vaccineinventory">vaccine inventory report </div>
+                    <form action="{{url_for('vaccineinventory_report')}}" method="post" id="vaccineinventoryform" hidden>
+                        <div class="text-center"><input type="radio" name="" id="btn1">filter by date </div>
+                        <div>
+                        </div>
+                        <div class="input-group" id="vaccineinventoryfilter" hidden>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">start date</label>
+                                <div class='input-group date'>
+                                    <input name="start" type='text' id="date" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                             <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">End Date</label>
+                                <div class='input-group date'>
+                                    <input name="end" type='text' id="date1" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                                 <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
 
 
+
+
+                        </div>
+                        <input type="submit" name="" value="generate" class="btn btn-primary btn-block">
+
+                    </form>
+                    <form action="{{url_for('healthinfo_report')}}" method="post" id="healthform" hidden>
+                        <div class="text-center"><input type="radio" name="" id="btn2">filter by date </div>
+                        <div>
+                        </div>
+                        <div class="input-group" id="healthfilter" hidden>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">start date</label>
+                                <div class='input-group date'>
+                                    <input name="start" type='text' id="date2" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                             <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">End Date</label>
+                                <div class='input-group date'>
+                                    <input name="end" type='text' id="date3" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                                 <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                        <input type="submit" name="" value="generate" class="btn btn-primary btn-block">
+
+                    </form>
+
+
+
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="modal fade" id="changepasswordmodal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header text-center text-white bg-danger">
-                <h2 class="modal-title" id="changepasswordlabel">Change password</h2>
-                <button type="button" data-dismiss="modal" class="close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form action="{{url_for('changepassword')}}" method="POST">
-                    <div class="form-group">
-                        <label class="form-group-label">Old password</label>
-                        <input type="password" name="old_password" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-group-label">New password</label>
-                        <input type="password" name="new_password" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-group-label">Confirm password</label>
-                        <input type="password" name="confirm_password" class="form-control">
-                    </div>
-                    <input type="submit" value="Change" class="btn btn-primary btn-block" />
-                </form>
+    <div class="modal fade" id="cowreporthmodal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary">
+                    <h3 class="modal-title" id="cowreportmodal">Print report</h3>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div><input type="radio" name="" id="check1">filter by date of birth</div>
+                    <form action="{{url_for('cowinfo_report')}}" method="POST">
+                        <div>
+                        </div>
+                        <div class="input-group" id="action2" hidden>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">start date</label>
+                                <div class='input-group date'>
+                                    <input name="start" type='text' id="date0" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                             <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">End Date</label>
+                                <div class='input-group date'>
+                                    <input name="end" type='text' id="date00" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                                 <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                        <input type="submit" name="" value="generate" class="btn btn-primary btn-block">
+
+                    </form>
+
+
+
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-
-<div class="modal fade" id="calvingreportmodal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header text-white bg-primary">
-                <h3 class="modal-title" id="calvingreportmodal">Generate Report</h3>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <a href="{{url_for('calving_report')}}" class="btn btn-primary btn-block">calving report</a>
-                <a href="{{url_for('death_report')}}" class="btn btn-primary btn-block">death report</a>
-                <a href="{{url_for('inseminations_report')}}" class="btn btn-primary btn-block">insemination report</a>
+    <div class="modal fade" id="changepasswordmodal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-center text-white bg-danger">
+                    <h2 class="modal-title" id="changepasswordlabel">Change password</h2>
+                    <button type="button" data-dismiss="modal" class="close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{url_for('changepassword')}}" method="POST">
+                        <div class="form-group">
+                            <label class="form-group-label">Old password</label>
+                            <input type="password" name="old_password" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-group-label">New password</label>
+                            <input type="password" name="new_password" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-group-label">Confirm password</label>
+                            <input type="password" name="confirm_password" class="form-control">
+                        </div>
+                        <input type="submit" value="Change" class="btn btn-primary btn-block" />
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+    <div class="modal fade" id="spoiltmodal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-center text-white bg-primary">
+                    <h2 class="modal-title" id="spoiltlabel">Spoilt milk</h2>
+                    <button type="button" data-dismiss="modal" class="close">&times;</button>
+                </div>
+                <div class="modal-block">
+                    <form action="{{url_for('spoilt_milk')}}" method="POST">
+                        <div class="form-group">
+                            <label class="form-group-label">quantity</label>
+                            <input type="number" min="1" name="quantity" placeholder="quantity" class="form-control">
+                        </div>
+                        <input type="submit" value="Submit" class="btn btn-primary btn-block" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="calvingreportmodal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary">
+                    <h3 class="modal-title" id="calvingreportmodal">Generate Report</h3>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div><input type="radio" name="" id="calving">calving report</div>
+                    <div><input type="radio" name="" id="inseminations">inseminations report </div>
+                    <div><input type="radio" name="" id="death">death report</div>
+                    <form action="{{url_for('calving_report')}}" method="POST" id="calvingform" hidden>
+                        <div class="text-center"><input type="radio" name="" id="btn3">filter by date </div>
+                        <div>
+                        </div>
+                        <div class="input-group" id="calvingfilter" hidden>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">start date</label>
+                                <div class='input-group date'>
+                                    <input name="start" type='text' id="date4" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                             <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">End Date</label>
+                                <div class='input-group date'>
+                                    <input name="end" type='text' id="date5" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                                 <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                        <input type="submit" name="" value="generate" class="btn btn-primary btn-block">
+
+                    </form>
+                    <form action="{{url_for('death_report')}}" method="POST" id="deathform" hidden>
+                        <div class="text-center"><input type="radio" name="" id="btn4">filter by date </div>
+                        <div>
+                        </div>
+                        <div class="input-group" id="deathfilter" hidden>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">start date</label>
+                                <div class='input-group date'>
+                                    <input name="start" type='text' id="date6" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                             <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">End Date</label>
+                                <div class='input-group date'>
+                                    <input name="end" type='text' id="date7" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                                 <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                        <input type="submit" name="" value="generate" class="btn btn-primary btn-block">
+
+                    </form>
+                    <form action="{{url_for('inseminations_report')}}" method="POST" id="inseminationsform" hidden>
+                        <div class="text-center"><input type="radio" name="" id="btn5">filter by date </div>
+                        <div>
+                        </div>
+                        <div class="input-group" id="inseminationsfilter" hidden>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">start date</label>
+                                <div class='input-group date'>
+                                    <input name="start" type='text' id="date8" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                             <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">End Date</label>
+                                <div class='input-group date'>
+                                    <input name="end" type='text' id="date9" class="form-control" readonly/>
+                                    <span class="input-group-addon">
+                                 <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                        <input type="submit" name="" value="generate" class="btn btn-primary btn-block">
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="/public/static/jquery3.min.js"></script>
     <!-- Bootstrap JS -->
     <script src="/public/static/bootstrap3.min.js"></script>
 
+
     <style>
-        .card {
+        .right {
             float: right !important;
-            width: 48vh !important;
         }
     </style>
-    {% include 'headers/footers.html' %}
+
+    <script src="/public/static/script.js"></script>
+    <script src="/public/static/jquery3.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="/public/static/bootstrap3.min.js"></script>
+    <script src="/public/static/moment.js"></script>
+    <script src="/public/static/datetimepicker.min.js"></script>
+    <link rel="stylesheet" href="/public/static/bootstrap-datetimepicker.css">
+    </div>
+
+    <style>
+        .test {
+            display: flex !important;
+        }
+    </style> {% include 'headers/footers.html' %}
+
+    <script src="public/one/tables.js"></script>

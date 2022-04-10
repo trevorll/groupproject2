@@ -1,35 +1,65 @@
-<nav class="fluid navbar navbar-expand-lg navbar-dark bg-dark p-0">
+<nav class="container navbar navbar-expand-lg navbar-dark bg-dark p-0">
     <div class="container-fluid">
-        <a class="navbar-brand" href=""><i class="fa fa-home"></i>Home</a>
+        <a class="navbar-brand" href="{{url_for('home')}}"><i class="fa fa-home"></i>Home</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
          <span class="navbar-toggler-icon"></span>
        </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav">
-                <li class="nav-item px-2">
-                    <a class="nav-link" href="{{url_for('view')}}">
-                        <i class="fa fa-search"></i>view cows
+            <ul class="navbar-nav ">
+                <li class="nav-item px-5">
+                    <a href="#" class="nav-link" style="text-decoration: none;" data-target="#choicemodal" data-toggle="modal">
+                        <i></i>view cows
                     </a>
                 </li>
-                <li>
+                <li class="nav-item px-5">
                     <a href="{{url_for('adminlogin')}}" class="nav-link">
-                        <i class="fa fa-search"></i>admin login
+                        <i class="fa fa-sign-in-alt"></i>admin login
                     </a>
                 </li>
-                <li>
+                <li class="nav-item px-5">
                     <a href="{{url_for('login')}}" class="nav-link">
-                        <i class="fa fa-search"></i>user login
+                        <i class="fa fa-sign-in-alt"></i>user login
                     </a>
                 </li>
-                <li>
+                <li class="nav-item px-5">
                     <a href="{{url_for('signup')}}" class="nav-link">
-                        <i class=""></i>usersignup
+                        <i class="fas fa-user-plus"></i>user signup
                     </a>
                 </li>
+            </ul>
 
+            <ul class="navbar-nav navbar-right ms-auto mb-2 mb-lg-0">
+                <li class="nav-item mr-auto">
+                    <span class="dropdown-toggle mt-4" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-expanded="false"><b class="text-white"><i class="fa fa-question-circle" style=" color: white;"></i>Need help</b></span>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li>
+                            <a class="dropdown-item" href="{{url_for('login_help')}}">
+                                <i class=""></i>help to login
+                            </a>
+
+                        </li>
+                        <li>
+                            <a class="" href="{{url_for('buy_cow_help')}}">
+                                <i class=""></i>help to buy cow
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{url_for('order_milk_help')}}">
+                                <i class=""></i>help to purchase milk
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{url_for('reset_pass_help')}}">
+                                <i class=""></i>help to reset password
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
             </ul>
+
+
 
         </div>
     </div>

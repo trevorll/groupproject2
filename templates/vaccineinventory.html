@@ -1,10 +1,10 @@
-{% include 'headers/headers.html' %}
+{% include 'headers/headers.html' %} {% include 'headers/adminnav.html' %}
 
 
 <body class="container-fluid bg-dark" style="background-image: url('/public/static/images/istockphoto-1297005217-612x612.jpg'); background-size:cover;background-blend-mode:overlay; height:100vh">
     <div style="opacity:0.9">
         <div>
-            <h1 class="text-center">DAIRY FARM MANAGEMENT</h1>
+            <h1 class="text-center">DAIRY FARM MANAGEMENT SYSTEM</h1>
         </div>
         <div class="container-fluid mt-5">
             <div class="row">
@@ -15,44 +15,53 @@
                                 <h2>VACCINE INVENTORY</h2>
                             </div>
                         </div>
-                        {% for message in get_flashed_messages() %} {{ message }} {% endfor %}
+                        <div class="text-center"> {% with messages = get_flashed_messages(with_categories=true) %} {% for category, message in messages %}
+                            <div class="{{ category }}">{{ message }}</div>
+                            {% endfor %} {%endwith%} </div>
                         <div class="card-body">
-                            {% for message in get_flashed_messages() %} {{ message }} {% endfor %}
                             <div class="card-body">
                                 <form action="{{url_for('vaccineinventory')}}" method="post">
 
-                                    <div class="form-group ">
-                                        <label for="cow_breed">vaccine name</label>
-                                        <input type="text" class="form-control" name="vaccine_name" placeholder="vaccine name" required>
+                                    <div class="row">
+                                        <div class="form-group w-50">
+                                            <label for="cow_breed">vaccine name</label>
+                                            <input type="text" class="form-control" pattern="[A-Za-z\\s]*" name="vaccine_name" placeholder="vaccine name" required>
+                                        </div>
+                                        <div class="form-group w-50">
+                                            <label class="form-control-label">disease treated</label>
+                                            <input type="text" class="form-control" placeholder="disease treated" name="disease_treated">
+                                        </div>
                                     </div>
-                                    <div class="form-group ">
-                                        <label class="form-control-label">disease treated</label>
-                                        <input type="text" class="form-control" placeholder="disease treated" name="disease_treated">
+                                    <div class="row">
+                                        <div class="form-group w-50">
+                                            <label class="form-control-label">admin national id</label>
+                                            <input type="number" min="1" class="form-control" maxlength="8" minlength="7" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" placeholder="admin national id" name="admin_national_id">
+                                        </div>
+                                        <div class="form-group w-50">
+                                            <label class="form-control-label">vaccine quantity</label>
+                                            <input type="number" min="1" class="form-control" placeholder="available vaccine quantity" name="available_vaccine_quantity">
+                                        </div>
                                     </div>
-                                    <div class="form-group ">
-                                        <label class="form-control-label">admin national id</label>
-                                        <input type="number" class="form-control" placeholder="admin national id" name="admin_national_id">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-control-label">available vaccine quantity</label>
-                                        <input type="number" class="form-control" placeholder="available vaccine quantity" name="available_vaccine_quantity">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-control-label">Date in</label>
-                                        <div class='input-group date' id='datetimepicker2'>
-                                            <input name="date_in" type='text' placeholder="Date in" id="date" class="form-control" />
-                                            <span class="input-group-addon">
-                                         <span class="glyphicon glyphicon-calendar"></span>
-                                            </span>
+
+                                    <div class="row">
+                                        <div class="form-group w-50">
+                                            <label class="form-control-label">Date in</label>
+                                            <div class='input-group date' id='datetimepicker2'>
+                                                <input name="date_in" type='text' id="date" class="form-control" readonly/>
+                                                <span class="input-group-addon">
+                                             <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group w-50">
+                                            <label class="form-control-label">supplier name</label>
+                                            <input type="text" pattern="[A-Za-z\\s]*" class="form-control" placeholder="supplier name" name="supplier_name">
                                         </div>
                                     </div>
                                     <div class="form-group ">
-                                        <label class="form-control-label">supplier name</label>
-                                        <input type="text" class="form-control" placeholder="supplier name" name="supplier_name">
-                                    </div>
-                                    <div class="form-group ">
                                         <label class="form-control-label">supplier contact</label>
-                                        <input type="text" class="form-control" placeholder="supplier contact" name="supplier_contact">
+                                        <input type="tel" min="1" class="form-control" placeholder="supplier contact" maxlength="10" minlength="10" id="phone" name="supplier_contact" required>
+                                        <p class="hide" id="result"></p>
                                     </div>
                                     <button class="btn btn-block btn-primary form-control" type="submit">submit</button>
                                 </form>
@@ -69,7 +78,58 @@
     <link rel="stylesheet" href="/public/static/bootstrap-datetimepicker.css">
     <script>
         $(function() {
-            $('#date').datetimepicker();
+            format: 'yyyy/MM/DD hh:mm A',
+
+            $('#date').datetimepicker({
+                format: 'yyyy/MM/DD hh:mm A',
+                defaultDate: new Date(),
+                minDate: new Date() - 2 * 24 * 60 * 60 * 1000,
+                maxDate: new Date(),
+                ignoreReadonly: true
+
+            });
         })
+    </script>
+    <script>
+        var input = document.querySelector("#phone"),
+            errorMsg = document.querySelector("#result"),
+            validMsg = document.querySelector("#result");
+
+        // here, the index maps to the error code returned from getValidationError - see readme
+        var errorMap = ["Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
+
+        // initialise plugin
+        var iti = window.intlTelInput(input, {
+            utilsScript: "/public/static/js/utils.js",
+            initialCountry: "ke",
+        });
+
+        var reset = function() {
+            input.classList.remove("error");
+            errorMsg.innerHTML = "";
+            errorMsg.classList.add("hide");
+            validMsg.classList.add("hide");
+        };
+
+        // on blur: validate
+        input.addEventListener('blur', function() {
+            reset();
+            if (input.value.trim()) {
+                if (iti.isValidNumber()) {
+                    validMsg.classList.remove("hide");
+                } else {
+                    input.classList.add("error");
+                    var errorCode = iti.getValidationError();
+                    errorMsg.innerHTML = errorMap[errorCode];
+                    errorMsg.classList.remove("hide");
+
+
+                }
+            }
+        });
+
+        // on keyup / change flag: reset
+        input.addEventListener('change', reset);
+        input.addEventListener('keyup', reset);
     </script>
     {% include 'headers/footers.html' %}

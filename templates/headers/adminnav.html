@@ -1,21 +1,43 @@
-<nav class="fluid navbar navbar-expand-lg navbar-dark bg-dark p-0">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{{url_for('adminlogin')}}"><i class="fa fa-home"></i>Home</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+<nav id="navbar_top" class=" container navbar navbar-expand-lg navbar-dark bg-dark p-0 navbar-fixed-top">
+    <div class="container">
+        <a class="navbar-brand" {% if 'superadmin' in session %} href="{{url_for('superadmin')}}" {%elif 'admin' in session%} href="{{url_for('adminlogin')}}" {%elif 'manager' in session%} href="{{url_for('manager_login')}}" {% endif %}><i class="fa fa-home"></i>Back To Dashboard</a>
+        <button class="navbar-toggler" type="button" data-dismiss="collapse" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
          <span class="navbar-toggler-icon"></span>
        </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav">
+            <ul class="nav navbar-nav mr-auto">
                 <li>
                     <a href="{{url_for('view')}}" class="nav-link">
-                        <i class="fa fa-milk"></i>view cows
+                        <i class="fa fa-eye"></i>view cows
                     </a>
+
                 </li>
 
 
-            </ul>
 
+            </ul>
+            <ul class="navbar-nav navbar-right ms-auto mb-2 mb-lg-0 ">
+                <li class="nav-item">
+                    <a href="{{url_for('logout')}}" class="nav-link" style="text-decoration: none;">
+                        <i class="fa fa-sign-out-alt"></i>logout
+                    </a>
+                </li>
+                {% if 'manager' in session %}
+                <li class="navbar-nav">
+                    <a href="{{url_for('display')}}" class="nav-link mt-2">
+                        <i class="fa fa-bell faa-ring animated"></i><span class="badge badge-danger badge-pill">{{notifications}}</span>
+                    </a>
+                </li>
+
+                {% endif %}
+            </ul>
         </div>
+
+
+
     </div>
 </nav>
+<br>
+<br>
+<div class="mt-6"></div>

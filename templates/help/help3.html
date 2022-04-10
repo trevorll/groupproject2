@@ -1,0 +1,24 @@
+{% include 'headers/headers.html' %} {% if 'user' in session%} {% include 'headers/usernav.html' %}{%else%} {% include 'headers/nav.html' %} {% endif %}
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <h1 class="text-center">Dairy Farm management system</h1>
+                <h3><u>ORDER MILK</u></h3>
+                <p>
+                    To order milk click on the 'order milk' button, Enter the quantity in litres you require and click on submit after which an stk push will be sent to the phone number you registered (if you have the sufficient Mpesa balance needed for payment) prompting
+                    you to enter your Mpesa pin and confirm the payment. You will then fill in the transaction code from the Mpesa message you received after the payment then click submit and your order will be placed.
+                </p>
+                <p>
+
+
+            </div>
+        </div>
+    </div>
+
+    <script src="/public/static/jquery3.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="/public/static/bootstrap3.min.js"></script>
+
+    {% include 'headers/footers.html' %}

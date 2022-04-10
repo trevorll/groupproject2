@@ -2,7 +2,7 @@
 
 <div class="text-center">
     <div style="opacity: 0.9;">
-        <h1>DAIRY MANAGEMENT SYSTEM</h1>
+        <h1>DAIRY FARM MANAGEMENT SYSTEM</h1>
     </div>
 </div>
 
@@ -17,7 +17,9 @@
                             <div class="card-title text-center">
                             </div>
                         </div>
-                        {% for message in get_flashed_messages() %} {{ message }} {% endfor %}
+                        <div class="text-center"> {% with messages = get_flashed_messages(with_categories=true) %} {% for category, message in messages %}
+                            <div class="{{ category }}">{{ message }}</div>
+                            {% endfor %} {%endwith%} </div>
                         <div class="card-body">
                             <form class="p-3" action="{{url_for('signup')}}" method="post">
                                 <div class="row">
