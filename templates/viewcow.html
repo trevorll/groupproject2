@@ -51,7 +51,7 @@
                         </script> {% endif %} {% endfor %}
                     </form>
                     {% endif %} {%elif 'admin' in session and user.role=='cow info admin' %} {% if cow.cow_status == true %}
-                    <a href="#" data-target="#updatecowinfo" data-toggle="modal" class="btn btn-primary btn-block">update price</a> {% endif %} {%elif not('admin' in session) and not('user' in session) %} {% if ((cow.cow_price | int) > 0 )%}
+                    <a href="#" data-target="#updatecowinfo" data-toggle="modal" class="btn btn-primary btn-block">update</a> {% endif %} {%elif not('admin' in session) and not('user' in session) %} {% if ((cow.cow_price | int) > 0 )%}
                     <a href="{{url_for('login')}}" class="btn btn-primary btn-block">Buy</a> {% endif %}{% endif %}
 
 

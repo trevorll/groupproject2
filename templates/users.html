@@ -3,10 +3,10 @@
 
 <!--NAVIGATION BAR FOR ADMIN-->
 
-
-<header id="main-header" class="py-2 bg-primary text-white">
-    <div class="container">
-        <div class="row">
+<br class="mt-5">
+<header id="main-header" class=" container py-2 bg-primary text-white">
+    <div class="container ">
+        <div class="row ">
             <div class="col-md-6 offset-md-3">
                 <h1 class="text-center"><i class="fa fa-users"></i> Users</h1>
             </div>
@@ -22,7 +22,7 @@
                 <form action="{{url_for('search_users')}}" method="POST">
                     <input name="flag" id="" value="farmers" type="text" hidden>
                     <div class="input-group">
-                        <input name="search" id="search" type="text" class="form-control" placeholder="Search User by First Name, Last Name, username, E-mail, gender" required>
+                        <input name="search" id="search" type="text" class="form-control" name="start" placeholder="Search User by First Name, Last Name, username, E-mail, gender" required>
                         <span class="input-group-btn">
                 <input type="submit" value="search" class="btn btn-primary btn-block">
               </span>

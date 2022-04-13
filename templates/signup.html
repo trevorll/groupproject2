@@ -54,7 +54,8 @@
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="national_id">national_id</label>
-                                        <input id="nationalid" min="1" type="number" maxlength="8" onchange="myFunction()" class="form-control" {% if 'superadmin' in session %} name="admin_national_id" {%else%} name="farmer_national_id" {% endif %} placeholder="national id" required>
+                                        <input id="nationalid" minlength="1" type="number" maxlength="8" onchange="myFunction()" class="form-control" {% if 'superadmin' in session %} name="admin_national_id" {%else%} name="farmer_national_id" {% endif %} oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                            placeholder="national id" required>
                                         <span id="message2"></span>
                                     </div>
                                 </div>

@@ -1024,7 +1024,7 @@ def paycow():
                 for cow in cows:
                     amount += cow.cow_price
 
-                amount = 1  # request.form['total_price']
+                # amount = 1  # request.form['total_price']
                 payload = {
                     "business_shortcode": 174379,
                     "passcode": "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919",
@@ -1615,4 +1615,4 @@ def get_calving_info(page=1):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port='8000')
+    app.run(debug=False, host='0.0.0.0', port='8000')
